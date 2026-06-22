@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>참교육 - 시사 찬반토론 탐구활동</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Noto Sans KR",sans-serif;background:#f5f4f0;color:#1a1a2e;overflow-x:hidden;}
+/* ===== INTRO ===== */
+#intro{position:fixed;inset:0;z-index:9999;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;}
+.grain{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");opacity:.5;pointer-events:none;animation:grain .4s steps(2) infinite;}
+@keyframes grain{0%{transform:translate(0,0)}50%{transform:translate(-2px,1px)}100%{transform:translate(1px,-1px)}}
+.bg-l1{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(160,20,20,.55),transparent);left:-200px;top:-200px;filter:blur(100px);animation:lp1 9s ease-in-out infinite;}
+.bg-l2{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(15,15,100,.5),transparent);right:-150px;bottom:-150px;filter:blur(100px);animation:lp2 11s ease-in-out infinite 1.5s;}
+.bg-l3{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(180,140,0,.25),transparent);left:50%;top:50%;transform:translate(-50%,-50%);filter:blur(80px);animation:lp3 7s ease-in-out infinite 3s;}
+@keyframes lp1{0%,100%{opacity:.4;transform:scale(.85)}50%{opacity:1;transform:scale(1.1)}}
+@keyframes lp2{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:.8;transform:scale(1.15)}}
+@keyframes lp3{0%,100%{opacity:0}50%{opacity:.7}}
+.scanline{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,.012) 2px,rgba(255,255,255,.012) 4px);pointer-events:none;}
+.red-line{position:absolute;left:50%;transform:translateX(-50%);width:1.5px;height:0;background:linear-gradient(180deg,transparent,#c00,#f40,#c00,transparent);animation:rl 1.1s ease-out .2s forwards;box-shadow:0 0 18px rgba(255,60,0,.8);}
+@keyframes rl{to{height:100vh}}
+.year-bg{position:absolute;right:5%;top:50%;transform:translateY(-50%);font-family:"Noto Serif KR",serif;font-size:clamp(70px,13vw,150px);font-weight:900;color:rgba(255,255,255,.025);line-height:1;pointer-events:none;letter-spacing:-.05em;opacity:0;animation:fi 1s .8s forwards;}
+.src-top{position:absolute;top:28px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;opacity:0;animation:fid .7s 1.4s forwards;}
+.src-top span{font-size:10px;letter-spacing:.35em;color:#777;text-transform:uppercase;}
+.src-dot{width:4px;height:4px;border-radius:50%;background:#c00;}
+.ic{position:relative;z-index:10;text-align:center;}
+.ic-label{font-family:"Noto Serif KR",serif;font-size:clamp(12px,2.5vw,16px);color:#777;letter-spacing:.5em;text-transform:uppercase;opacity:0;animation:fiu .7s 1.1s forwards;margin-bottom:14px;}
+.ic-main{font-family:"Noto Serif KR",serif;font-size:clamp(54px,11vw,108px);font-weight:900;color:#fff;letter-spacing:-.02em;line-height:1;opacity:0;animation:tr 1.1s cubic-bezier(.22,1,.36,1) 1.4s forwards;display:block;text-shadow:0 0 50px rgba(255,255,255,.08);}
+.ic-main em{font-style:normal;color:#c22;text-shadow:0 0 40px rgba(200,34,0,.6);}
+.ic-sub{font-family:"Noto Serif KR",serif;font-size:clamp(16px,3.5vw,28px);font-weight:400;color:#bbb;letter-spacing:.2em;opacity:0;animation:fiu .7s 2.2s forwards;margin-top:10px;}
+.ic-deco{display:flex;align-items:center;gap:14px;justify-content:center;margin:22px 0;opacity:0;animation:fi .7s 2.6s forwards;}
+.ic-deco::before,.ic-deco::after{content:"";flex:1;max-width:100px;height:1px;background:linear-gradient(90deg,transparent,#444,transparent);}
+.ic-diamond{width:5px;height:5px;border:1px solid #c22;transform:rotate(45deg);box-shadow:0 0 8px rgba(200,34,0,.5);}
+.ic-copy{font-family:"Dancing Script",cursive;font-size:clamp(15px,3vw,20px);color:#c8a000;opacity:0;animation:gw .9s 3s forwards;text-shadow:0 0 16px rgba(200,160,0,.8);letter-spacing:.05em;}
+@keyframes gw{0%{opacity:0;filter:blur(6px)}60%{opacity:1;filter:blur(1px)}100%{opacity:1;filter:blur(0)}}
+.ic-start{margin-top:42px;opacity:0;animation:fiu .7s 3.7s forwards;}
+.start-btn{padding:13px 44px;background:transparent;border:1px solid rgba(255,255,255,.25);color:#fff;font-family:"Noto Sans KR",sans-serif;font-size:13px;font-weight:500;letter-spacing:.3em;cursor:pointer;text-transform:uppercase;transition:all .3s;position:relative;overflow:hidden;}
+.start-btn::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(200,34,0,.25),transparent);transform:translateX(-100%);transition:transform .5s;}
+.start-btn:hover::before{transform:translateX(100%);}
+.start-btn:hover{border-color:rgba(200,34,0,.7);box-shadow:0 0 24px rgba(200,34,0,.25);}
+.start-hint{margin-top:14px;font-size:10px;color:#555;letter-spacing:.2em;animation:blink 2s 5s infinite;}
+@keyframes blink{0%,100%{opacity:.4}50%{opacity:1}}
+.ep-tag{position:absolute;top:28px;right:36px;font-size:10px;color:#555;letter-spacing:.2em;opacity:0;animation:fi .7s 3.7s forwards;display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+.ep-tag strong{font-size:20px;color:#2a2a2a;font-family:"Noto Serif KR",serif;font-weight:700;}
+.intro-footer{position:absolute;bottom:24px;width:100%;display:flex;justify-content:space-between;padding:0 36px;opacity:0;animation:fi .7s 3.9s forwards;}
+.intro-footer span{font-size:10px;color:#3a3a3a;letter-spacing:.18em;}
+.particles{position:absolute;inset:0;pointer-events:none;}
+.particle{position:absolute;border-radius:50%;background:rgba(255,210,0,.5);animation:pf var(--d,4s) ease-in-out infinite var(--dl,0s);}
+@keyframes pf{0%,100%{transform:translateY(0) scale(1);opacity:.3}50%{transform:translateY(-12px) scale(1.4);opacity:.8}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes fiu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fid{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes tr{0%{opacity:0;clip-path:inset(0 100% 0 0)}100%{opacity:1;clip-path:inset(0 0% 0 0)}}
+#intro.exit{animation:iex 1.1s ease-in-out forwards;}
+@keyframes iex{0%{opacity:1;transform:scale(1)}30%{opacity:1;transform:scale(1.02)}100%{opacity:0;transform:scale(.97);pointer-events:none;}}
+/* ===== APP ===== */
+#app{display:none;}
+.app-header{background:linear-gradient(135deg,#1e1b4b 0%,#312e7a 50%,#4338ca 100%);padding:0;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.25);}
+.header-inner{max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.header-brand{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.brand-logo{font-family:"Noto Serif KR",serif;font-size:clamp(16px,3vw,22px);font-weight:900;color:#fff;letter-spacing:-.01em;}
+.brand-logo em{font-style:normal;color:#f87171;}
+.brand-source{font-size:10px;color:rgba(255,255,255,.6);letter-spacing:.1em;display:flex;align-items:center;gap:5px;}
+.brand-source::before{content:"";width:1px;height:10px;background:rgba(255,255,255,.3);}
+.brand-copy{font-family:"Dancing Script",cursive;font-size:14px;color:#fbbf24;text-shadow:0 0 10px rgba(251,191,36,.5);}
+.header-btns{display:flex;gap:5px;flex-wrap:wrap;}
+.hbtn{padding:6px 12px;border-radius:8px;border:none;cursor:pointer;font-size:11px;font-weight:500;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:4px;white-space:nowrap;}
+.hbtn-manual{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);}
+.hbtn-manual:hover{background:rgba(255,255,255,.25);}
+.hbtn-save{background:#10b981;color:#fff;}
+.hbtn-save:hover{background:#059669;}
+.hbtn-load{background:#6366f1;color:#fff;}
+.hbtn-load:hover{background:#4f46e5;}
+.hbtn-pdf{background:#ef4444;color:#fff;}
+.hbtn-pdf:hover{background:#dc2626;}
+.hbtn-pres{background:#f59e0b;color:#fff;}
+.hbtn-pres:hover{background:#d97706;}
+.app-body{max-width:1100px;margin:0 auto;padding:16px 14px 60px;display:grid;grid-template-columns:290px 1fr;gap:16px;}
+@media(max-width:768px){.app-body{grid-template-columns:1fr;}}
+.sidebar{position:sticky;top:70px;height:calc(100vh - 86px);display:flex;flex-direction:column;gap:8px;}
+.sb-search{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #e0dff5;border-radius:10px;padding:9px 12px;box-shadow:0 1px 4px rgba(67,56,202,.07);}
+.sb-search input{flex:1;border:none;outline:none;font-size:13px;font-family:inherit;background:transparent;color:#1a1a2e;}
+.sb-search input::placeholder{color:#aaa;}
+.cats-row{display:flex;gap:5px;overflow-x:auto;padding-bottom:2px;flex-shrink:0;}
+.cats-row::-webkit-scrollbar{height:0;}
+.cat-btn{white-space:nowrap;padding:5px 10px;border-radius:20px;border:1.5px solid #e0dff5;background:#fff;color:#666;cursor:pointer;font-size:11px;font-family:inherit;transition:all .12s;flex-shrink:0;}
+.cat-btn.on{background:#312e7a;color:#fff;border-color:#312e7a;}
+.link-note{font-size:10px;color:#888;background:#f0f0ff;border-radius:7px;padding:6px 9px;text-align:center;border:1px solid #e0dff5;line-height:1.5;flex-shrink:0;}
+.t-count{font-size:11px;color:#999;padding:0 2px;flex-shrink:0;}
+.topic-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:5px;}
+.topic-list::-webkit-scrollbar{width:3px;}
+.topic-list::-webkit-scrollbar-thumb{background:#d0ceee;border-radius:2px;}
+.tc{background:#fff;border:1.5px solid #e8e7f5;border-radius:10px;padding:9px 11px;cursor:pointer;transition:all .12s;display:flex;align-items:flex-start;gap:7px;}
+.tc:hover{border-color:#818cf8;box-shadow:0 2px 8px rgba(67,56,202,.1);}
+.tc.on{border:2px solid #312e7a;background:#f8f7ff;}
+.tc-l{flex:1;}
+.tc-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;display:inline-block;margin-bottom:4px;}
+.tc-title{font-size:12px;color:#1a1a2e;line-height:1.4;}
+.tc-date{font-size:10px;color:#aaa;margin-top:3px;}
+.tc-lnk{font-size:15px;color:#aaa;text-decoration:none;flex-shrink:0;padding-top:2px;transition:color .12s;}
+.tc-lnk:hover{color:#312e7a;}
+.main-area{}
+.no-sel{background:#fff;border:1.5px dashed #d0ceee;border-radius:14px;padding:50px 30px;text-align:center;color:#aaa;}
+.thc{background:linear-gradient(135deg,#1e1b4b,#312e7a);border-radius:14px;padding:18px 20px;margin-bottom:14px;color:#fff;}
+.thc-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.thc-cat-tag{font-size:9px;font-weight:700;padding:2px 8px;border-radius:5px;}
+.thc-date{font-size:11px;color:rgba(255,255,255,.5);background:rgba(255,255,255,.1);padding:2px 8px;border-radius:10px;}
+.thc-title{font-size:clamp(15px,2.5vw,19px);font-weight:700;line-height:1.4;margin-bottom:10px;}
+.thc-lnk{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#fbbf24;text-decoration:none;background:rgba(251,191,36,.15);padding:5px 12px;border-radius:8px;transition:background .15s;}
+.thc-lnk:hover{background:rgba(251,191,36,.25);}
+.thc-src{font-size:10px;color:rgba(255,255,255,.4);margin-top:8px;}
+.prog{margin-bottom:12px;height:4px;background:#e0dff5;border-radius:2px;overflow:hidden;}
+.prog-f{height:100%;background:linear-gradient(90deg,#312e7a,#6366f1);border-radius:2px;transition:width .35s ease;}
+.step-nav{display:flex;gap:0;border-radius:12px;overflow:hidden;border:1.5px solid #e0dff5;background:#fff;margin-bottom:14px;}
+.step-btn{flex:1;padding:9px 3px;background:transparent;border:none;border-right:1px solid #e0dff5;cursor:pointer;font-size:9px;color:#aaa;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:inherit;transition:all .12s;}
+.step-btn:last-child{border-right:none;}
+.step-btn.on{background:#312e7a;color:#fff;}
+.step-btn:hover:not(.on){background:#f5f4ff;color:#312e7a;}
+.step-ico{font-size:15px;}
+.step-n{font-size:8px;font-weight:700;}
+.act{background:#fff;border:1.5px solid #e0dff5;border-radius:14px;padding:clamp(14px,3vw,22px);box-shadow:0 2px 12px rgba(49,46,122,.05);}
+.act-head{display:flex;align-items:center;gap:11px;margin-bottom:16px;padding-bottom:12px;border-bottom:1.5px solid #f0eff8;}
+.act-ico{width:38px;height:38px;border-radius:10px;background:#f0effe;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:19px;}
+.act-head h3{font-size:14px;font-weight:700;color:#1a1a2e;}
+.act-head p{font-size:11px;color:#aaa;margin-top:2px;}
+.sl{font-size:10px;font-weight:700;color:#312e7a;letter-spacing:.1em;text-transform:uppercase;margin:14px 0 6px;}
+.sl:first-of-type{margin-top:0;}
+.kw-wrap{display:flex;flex-wrap:wrap;gap:5px;}
+.kw{font-size:11px;padding:3px 9px;border-radius:20px;background:#f5f4ff;color:#312e7a;border:1px solid #d0ceee;}
+.ql{list-style:none;}
+.qi{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #f0eff8;font-size:13px;color:#333;line-height:1.5;align-items:flex-start;}
+.qi:last-child{border-bottom:none;}
+.qn{min-width:20px;height:20px;border-radius:50%;background:#f0effe;color:#312e7a;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.db-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+@media(max-width:600px){.db-row{grid-template-columns:1fr;}}
+.db{border-radius:10px;padding:12px 14px;}
+.db.pro{background:#f0fdf4;border-left:3px solid #16a34a;}
+.db.con{background:#fef2f2;border-left:3px solid #dc2626;}
+.db-lbl{font-size:10px;font-weight:700;margin-bottom:6px;}
+.db.pro .db-lbl{color:#15803d;}
+.db.con .db-lbl{color:#b91c1c;}
+.db p{font-size:12px;line-height:1.7;color:#333;}
+textarea{width:100%;border:1.5px solid #e0dff5;border-radius:10px;padding:10px 12px;font-size:13px;font-family:"Noto Sans KR",sans-serif;color:#1a1a2e;background:#fafafa;resize:vertical;line-height:1.7;outline:none;transition:border-color .15s;margin-bottom:4px;}
+textarea:focus{border-color:#6366f1;background:#fff;}
+.stance-row{display:flex;gap:8px;margin-bottom:12px;}
+.sbtn{flex:1;padding:9px;border-radius:10px;border:1.5px solid #e0dff5;background:#fff;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;transition:all .12s;}
+.sbtn.pro-s{color:#15803d;}
+.sbtn.pro-s.on{background:#f0fdf4;border-color:#16a34a;}
+.sbtn.con-s{color:#b91c1c;}
+.sbtn.con-s.on{background:#fef2f2;border-color:#dc2626;}
+.chklist{list-style:none;}
+.chk-item{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid #f0eff8;font-size:13px;}
+.chk-item:last-child{border-bottom:none;}
+.chk-box{width:19px;height:19px;border-radius:5px;border:1.5px solid #d0ceee;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .12s;font-size:12px;color:#fff;}
+.chk-box.on{background:#312e7a;border-color:#312e7a;}
+.nav-row{display:flex;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1.5px solid #f0eff8;gap:8px;}
+.nb{padding:8px 16px;border-radius:10px;border:1.5px solid #e0dff5;background:#fff;cursor:pointer;font-size:12px;font-weight:500;font-family:inherit;color:#555;display:flex;align-items:center;gap:5px;transition:all .12s;}
+.nb:hover:not(:disabled){border-color:#6366f1;color:#312e7a;}
+.nb:disabled{opacity:.3;cursor:default;}
+.nb.pri{background:#312e7a;border-color:#312e7a;color:#fff;margin-left:auto;}
+.nb.pri:hover:not(:disabled){background:#1e1b4b;}
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
+.mo.open{display:flex;}
+.mo-box{background:#fff;border-radius:16px;width:100%;max-width:660px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.mo-head{padding:18px 22px 14px;border-bottom:1px solid #f0eff8;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1;}
+.mo-head h2{font-size:17px;font-weight:700;color:#1a1a2e;}
+.mo-close{width:30px;height:30px;border-radius:7px;border:none;background:#f5f4ff;cursor:pointer;font-size:16px;}
+.mo-body{padding:18px 22px 26px;}
+.mo-sec{margin-bottom:18px;}
+.mo-sec h3{font-size:13px;font-weight:700;color:#312e7a;margin-bottom:7px;padding-left:9px;border-left:3px solid #312e7a;}
+.mo-sec p,.mo-sec li{font-size:13px;line-height:1.8;color:#444;}
+.mo-sec ol,.mo-sec ul{padding-left:16px;}
+.mo-tip{background:#f5f4ff;border-radius:8px;padding:11px 13px;font-size:12px;color:#555;line-height:1.8;border-left:3px solid #6366f1;}
+/* PRESENTATION */
+#pres{position:fixed;inset:0;z-index:800;background:#0a0a14;display:none;flex-direction:column;}
+.ph{padding:14px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.1);}
+.ph h2{font-size:13px;color:rgba(255,255,255,.6);font-weight:400;max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pc{display:flex;align-items:center;gap:8px;}
+.pb{padding:7px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:12px;font-family:inherit;transition:all .15s;}
+.pb:hover{background:rgba(255,255,255,.15);}
+.pb.ex{background:#ef4444;border-color:#ef4444;}
+.ps{flex:1;display:flex;align-items:center;justify-content:center;padding:32px;position:relative;overflow:hidden;}
+.sc{width:100%;max-width:900px;animation:si .35s ease-out;}
+@keyframes si{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.snum{position:absolute;bottom:16px;right:20px;font-size:10px;color:rgba(255,255,255,.25);}
+.pf2{padding:12px 22px;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;gap:10px;}
+.pdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:all .12s;}
+.pdot.on{background:#6366f1;transform:scale(1.3);}
+/* SLIDE TYPES */
+.slc{text-align:center;}
+.slc .sls{font-size:clamp(10px,1.8vw,13px);color:rgba(255,255,255,.4);letter-spacing:.3em;text-transform:uppercase;margin-bottom:14px;}
+.slc .slt{font-family:"Noto Serif KR",serif;font-size:clamp(22px,5vw,46px);font-weight:900;color:#fff;line-height:1.3;margin-bottom:14px;}
+.slc .slt em{font-style:normal;color:#f87171;}
+.slc .sld{font-size:12px;color:rgba(255,255,255,.3);}
+.sls2{width:100%;}
+.sls2 .sh{font-size:clamp(10px,1.8vw,13px);color:#818cf8;letter-spacing:.25em;text-transform:uppercase;margin-bottom:12px;}
+.sls2 .sm{font-family:"Noto Serif KR",serif;font-size:clamp(18px,3.5vw,34px);font-weight:700;color:#fff;line-height:1.4;margin-bottom:16px;}
+.sbody{font-size:clamp(12px,1.8vw,15px);color:rgba(255,255,255,.75);line-height:1.85;white-space:pre-wrap;}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
+@media(max-width:600px){.sgrid{grid-template-columns:1fr;}}
+.sbox{border-radius:10px;padding:14px;}
+.sbox.pro{background:rgba(22,163,74,.12);border:1px solid rgba(22,163,74,.3);}
+.sbox.con{background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.3);}
+.sbl{font-size:10px;font-weight:700;margin-bottom:7px;}
+.sbox.pro .sbl{color:#4ade80;}
+.sbox.con .sbl{color:#f87171;}
+.sbox p{font-size:clamp(11px,1.7vw,13px);color:rgba(255,255,255,.7);line-height:1.7;}
+.su{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.3);border-radius:10px;padding:14px;font-size:clamp(12px,1.8vw,14px);color:rgba(255,255,255,.85);line-height:1.85;white-space:pre-wrap;}
+.skw{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
+.skw span{font-size:11px;padding:3px 11px;border-radius:20px;background:rgba(99,102,241,.2);color:#a5b4fc;border:1px solid rgba(99,102,241,.3);}
+/* PRINT */
+@media print{
+  #intro,#app .app-header,#app .sidebar,#pres,.mo{display:none!important;}
+  body{background:#fff;}
+  .app-body{grid-template-columns:1fr;max-width:100%;padding:0;}
+  .thc{background:#1e1b4b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .step-nav,.nav-row,.prog{display:none;}
+  .act{box-shadow:none;border:1px solid #ddd;}
+}
+@media(max-width:480px){
+  .header-inner{padding:9px 12px;}
+  .hbtn{padding:5px 9px;font-size:10px;}
+  .ep-tag,.year-bg{display:none;}
+  .intro-footer{padding:0 14px;}
+  .brand-copy{display:none;}
+}
+</style>
+</head>
+<body>
+<div id="intro" onclick="startApp()">
+  <div class="bg-l1"></div><div class="bg-l2"></div><div class="bg-l3"></div>
+  <div class="grain"></div><div class="scanline"></div><div class="red-line"></div>
+  <div class="year-bg">2025</div>
+  <div class="particles" id="particles"></div>
+  <div class="src-top"><div class="src-dot"></div><span>한국경제신문 · 생글생글</span><div class="src-dot"></div></div>
+  <div class="ic">
+    <div class="ic-label">고등학교 시사 탐구활동</div>
+    <span class="ic-main"><em>참</em>교육</span>
+    <div class="ic-sub">찬반토론 탐구활동</div>
+    <div class="ic-deco"><div class="ic-diamond"></div><div class="ic-diamond"></div><div class="ic-diamond"></div></div>
+    <div class="ic-copy">Copyright &copy; All Teachers</div>
+    <div class="ic-start">
+      <button class="start-btn">탐구 시작하기</button>
+      <div class="start-hint">▼ 클릭하여 시작</div>
+    </div>
+  </div>
+  <div class="ep-tag"><span>시사 이슈</span><strong>115+</strong><span>주제 수록</span></div>
+  <div class="intro-footer"><span>출처 · 한국경제 생글생글</span><span>Copyright &copy; All Teachers</span></div>
+</div>
+
+
+<div id="app">
+  <div class="app-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <div class="brand-logo"><em>참</em>교육 시사 찬반토론</div>
+        <div class="brand-source">출처: 한국경제 생글생글</div>
+        <div class="brand-copy">Copyright &copy; All Teachers</div>
+      </div>
+      <div class="header-btns">
+        <button class="hbtn hbtn-manual" onclick="openMo('teacher')">📋 선생님 설명서</button>
+        <button class="hbtn hbtn-manual" onclick="openMo('student')">📖 학생 설명서</button>
+        <button class="hbtn hbtn-save" onclick="saveWork()">💾 저장</button>
+        <button class="hbtn hbtn-load" onclick="loadWork()">📂 불러오기</button>
+        <button class="hbtn hbtn-pdf" onclick="printPDF()">🖨 PDF</button>
+        <button class="hbtn hbtn-pres" onclick="startPres()">🎬 발표</button>
+      </div>
+    </div>
+  </div>
+  <div class="app-body">
+    <aside class="sidebar">
+      <div class="sb-search">
+        <span style="font-size:15px;color:#aaa">🔍</span>
+        <input type="text" id="srch" placeholder="주제·키워드 검색..." oninput="filterT()">
+      </div>
+      <div class="cats-row" id="catRow"></div>
+      <div class="link-note">🔗 주제 카드 우측 아이콘 클릭 시<br><b>한국경제 생글생글</b> 원문으로 이동합니다</div>
+      <div class="t-count" id="tCount"></div>
+      <div class="topic-list" id="tList"></div>
+    </aside>
+    <main class="main-area" id="mainArea">
+      <div class="no-sel">
+        <div style="font-size:36px;margin-bottom:12px">👈</div>
+        <p style="font-size:14px">왼쪽 목록에서 탐구할 주제를 선택하세요</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- 선생님 설명서 -->
+<div class="mo" id="mo-teacher">
+  <div class="mo-box">
+    <div class="mo-head"><h2>📋 선생님 설명서</h2><button class="mo-close" onclick="closeMo('teacher')">✕</button></div>
+    <div class="mo-body">
+      <div class="mo-sec"><h3>프로그램 개요</h3><p>한국경제 생글생글의 시사 찬반토론 주제를 활용한 고등학교 탐구활동 도구입니다. AI 없이 학생 스스로 단계별 활동지를 완성하도록 설계되었습니다.</p></div>
+      <div class="mo-sec"><h3>수업 활용 방법</h3><ol><li><b>개인 탐구</b> — 학생이 관심 주제를 선택하여 혼자 활동지 완성</li><li><b>모둠 토론</b> — 같은 주제로 찬성/반대 팀을 나눠 토론 후 정리</li><li><b>발표 수업</b> — 발표 슬라이드 기능으로 바로 발표로 연결</li><li><b>포트폴리오</b> — HTML 저장 기능으로 탐구 결과물 보관</li></ol></div>
+      <div class="mo-sec"><h3>5단계 탐구 활동 안내</h3><ol><li><b>1단계 주제 파악</b> — 배경지식, 핵심 키워드, 탐구 전 질문 확인</li><li><b>2단계 찬반 분석</b> — 찬성·반대 논거 분석 및 추가 논거 직접 정리</li><li><b>3단계 탐구 설계</b> — 탐구 주제 선정, 방법 계획 수립</li><li><b>4단계 내 의견</b> — 입장 표명, 근거 서술, 반론 대응</li><li><b>5단계 마무리</b> — 체크리스트 점검, 소감 작성</li></ol></div>
+      <div class="mo-sec"><h3>저장 및 출력 안내</h3><ul><li>💾 <b>저장</b> — 작성 내용을 HTML 파일로 다운로드 (학생 이름 파일 관리 권장)</li><li>📂 <b>불러오기</b> — 저장된 HTML 파일 업로드하여 이어서 작성</li><li>🖨 <b>PDF</b> — 브라우저 인쇄 기능으로 PDF 저장 (Ctrl+P 또는 Cmd+P)</li><li>🎬 <b>발표</b> — 작성 내용 기반 발표 슬라이드 자동 생성, 키보드 방향키로 전환</li></ul></div>
+      <div class="mo-tip">💡 <b>팁:</b> 수업 전 관련 생글생글 기사를 미리 읽어오면 더 깊이 있는 탐구가 가능합니다. 각 주제의 🔗 링크로 원문 기사를 확인하세요.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 학생 설명서 -->
+<div class="mo" id="mo-student">
+  <div class="mo-box">
+    <div class="mo-head"><h2>📖 학생 설명서</h2><button class="mo-close" onclick="closeMo('student')">✕</button></div>
+    <div class="mo-body">
+      <div class="mo-sec"><h3>탐구활동이란?</h3><p>시사 이슈에 대해 찬성과 반대 의견을 살펴보고, 나만의 주장을 논리적으로 정리하는 활동입니다. 한국경제 생글생글에 실린 최신 주제들로 진행해요!</p></div>
+      <div class="mo-sec"><h3>이렇게 하세요!</h3><ol><li>왼쪽에서 <b>관심 있는 주제</b>를 클릭하세요</li><li>주제 카드의 <b>🔗 아이콘</b>으로 원문 기사를 읽어보세요</li><li><b>1단계부터 5단계까지</b> 순서대로 활동지를 채우세요</li><li>다 쓰면 <b>💾 저장</b>으로 내 파일을 보관하세요</li><li><b>🎬 발표</b> 버튼으로 발표 슬라이드를 바로 만들 수 있어요</li></ol></div>
+      <div class="mo-sec"><h3>원문 기사 안내</h3><p>각 주제의 🔗 아이콘을 클릭하면 <b>한국경제 생글생글</b> 홈페이지의 관련 기사로 이동합니다. 기사를 읽으면 더 풍부한 탐구를 할 수 있어요!</p></div>
+      <div class="mo-sec"><h3>이어서 쓰고 싶다면?</h3><p>💾 저장 → HTML 파일 다운로드 → 나중에 📂 불러오기로 열면 이전에 쓴 내용이 그대로 복원돼요.</p></div>
+      <div class="mo-tip">💡 <b>팁:</b> 먼저 내 생각을 써보고 원문 기사를 읽으면, 내 생각이 어떻게 달라지는지 비교해볼 수 있어요!</div>
+    </div>
+  </div>
+</div>
+
+<!-- 발표 슬라이드 -->
+<div id="pres">
+  <div class="ph">
+    <h2 id="presTitle">참교육 시사 찬반토론 탐구활동</h2>
+    <div class="pc">
+      <button class="pb" onclick="prevSl()">◀ 이전</button>
+      <span id="slCnt" style="font-size:11px;color:rgba(255,255,255,.4)">1 / 6</span>
+      <button class="pb" onclick="nextSl()">다음 ▶</button>
+      <button class="pb ex" onclick="endPres()">✕ 종료</button>
+    </div>
+  </div>
+  <div class="ps"><div class="sc" id="slContent"></div><div class="snum" id="slNum"></div></div>
+  <div class="pf2" id="presDots"></div>
+</div>
+
+<!-- 파일 입력 -->
+<input type="file" id="fileInput" accept=".html" style="display:none" onchange="handleLoad(event)">
+
+<script>
+const CC={"교육":{"bg":"#dcfce7","tx":"#15803d"},"경제":{"bg":"#fef3c7","tx":"#b45309"},"환경·윤리":{"bg":"#d1fae5","tx":"#065f46"},"사회·법":{"bg":"#dbeafe","tx":"#1e40af"},"디지털·AI":{"bg":"#ede9fe","tx":"#5b21b6"},"정치·국제":{"bg":"#fee2e2","tx":"#9f1239"},"문화·미디어":{"bg":"#fce7f3","tx":"#9d174d"},"보건·의료":{"bg":"#ffedd5","tx":"#9a3412"},"글로벌·과학":{"bg":"#f0fdf4","tx":"#14532d"}};
+
+const T=[
+{id:0,c:"교육",t:"학교 내 스마트폰 사용 금지, 필요한가?",u:"https://sgsg.hankyung.com/article/2026061231701",date:"2026.06.12",p:"수업 집중도 향상과 불법 촬영·사이버 괴롭힘을 차단한다. 교사 교육권과 학생 학습권을 보호할 수 있다.",n:"학생의 자기결정권과 디지털 활용 기회를 박탈한다. 긴급 상황 시 연락 두절 문제가 생긴다.",k:["디지털 리터러시","학습권","자기결정권","스마트폰 중독","폰프리스쿨"],q:["스마트폰이 학업 성취도에 미치는 영향을 조사해보자","해외 학교의 스마트폰 정책 사례를 비교해보자","청소년 스마트폰 중독 현황과 대안을 탐색해보자"]},
+{id:1,c:"교육",t:"교권 침해를 학생부에 기재해야 하나?",u:"https://sgsg.hankyung.com/article/2026051586421",date:"2026.05.15",p:"강력한 예방 장치가 있어야 효과가 생긴다. 다수의 학습권과 교사 교육권을 지키는 최후의 방어막이다.",n:"낙인 효과로 학생의 장래를 제약할 수 있다. 소송으로 교사가 2차 피해에 노출된다.",k:["교권 보호","낙인 효과","생기부","학습권","교육환경"],q:["서이초 사건 이후 교권 침해 실태 변화를 분석해보자","학교폭력 생기부 기재제도의 효과와 문제점을 조사해보자","교권 보호를 위한 해외 제도를 비교해보자"]},
+{id:2,c:"교육",t:"교과서 한자 병기, 문해력에 도움 될까?",u:"https://sgsg.hankyung.com/article/2026043078151",date:"2026.04.30",p:"한자를 알면 단어 의미를 쉽게 이해해 문해력을 높인다.",n:"사교육을 부추기고 학습 부담을 가중시킨다.",k:["문해력","한자 교육","언어 정책","사교육","교육 부담"],q:["한자 교육이 문해력 향상에 미치는 효과를 조사해보자","한·일·중의 한자 교육 정책을 비교 분석해보자","청소년 문해력 저하의 원인과 해결 방안을 탐구해보자"]},
+{id:3,c:"교육",t:"영유아 사교육 열풍, 차단해야 할까?",u:"https://sgsg.hankyung.com/article/2026042441101",date:"2026.04.24",p:"창의적 뇌 발달이 중요한 시기에 주입식 교육은 해롭다.",n:"부모의 교육 선택권을 정부가 강제로 제한하는 것은 자유 침해다.",k:["조기 교육","아동 발달","사교육","교육권","영유아 교육"],q:["영유아기 뇌 발달에 적합한 교육 방식을 탐구해보자","해외 영유아 교육 규제 사례를 조사해보자","조기 사교육이 장기 학업 성취에 미치는 영향을 분석해보자"]},
+{id:4,c:"교육",t:"학교안전사고 예방, 법으로 강제해야 하나?",u:"https://sgsg.hankyung.com/article/2026060590551",date:"2026.06.05",p:"예기치 못한 사고까지 교사에게 형사책임을 묻는 것은 과도하다.",n:"안전 기준을 법으로 명시해야 예방 효과가 있다.",k:["교사 책임","현장 체험학습","학교안전법","과실 기준","교권"],q:["현장 체험학습 위축 현황과 교육적 영향을 분석해보자","교사 법적 책임 관련 판례를 조사해보자","학교 안전사고 예방을 위한 제도 개선 방향을 탐구해보자"]},
+{id:5,c:"교육",t:"서울 학원 교습 시간 밤 12시까지 늘려야 하나?",u:"https://sgsg.hankyung.com/article/2025112174321",date:"2025.11.21",p:"시간 규제만으로 사교육을 억제할 수 없으며 학생·학부모에게 선택권을 줘야 한다.",n:"학생 수면권 침해와 자정 귀가 안전 문제, 사교육 격화 우려가 있다.",k:["사교육","학원 규제","학생 건강","야간 학습","수면권"],q:["학원 교습 시간 규제와 사교육비의 상관관계를 분석해보자","야간 학습이 청소년 건강에 미치는 영향을 조사해보자","사교육 문제 해결을 위한 정책 접근을 비교해보자"]},
+{id:6,c:"교육",t:"KAIST 석학의 중국행, 선택 존중해야 하나?",u:"https://sgsg.hankyung.com/article/2025101004681",date:"2025.10.10",p:"정년 후 연구 기회가 없는 제도적 공백이 원인이며 학자의 선택을 존중해야 한다.",n:"국가 핵심 기술 유출 우려가 있으며 군사 연구 기관으로의 이직은 문제다.",k:["두뇌 유출","연구자 처우","기술 안보","정년 제도","지식재산"],q:["국내 고급 인력의 해외 유출 현황을 분석해보자","주요국의 핵심 기술 인력 이직 규제 사례를 조사해보자","한국 과학기술 인력 처우 개선 방안을 탐구해보자"]},
+{id:7,c:"교육",t:"AI 디지털교과서 도입 필요한가?",u:"https://sgsg.hankyung.com/article/2025032848951",date:"2025.03.28",p:"개인 맞춤형 학습 지원과 다양한 멀티미디어 활용으로 학습 효율을 높인다.",n:"디지털 과몰입을 심화시키고 교육 환경·예산이 충분히 갖춰지지 않았다.",k:["AI 교과서","에듀테크","개인 맞춤 학습","디지털 교육","교육 격차"],q:["AI 디지털교과서 도입 현황과 학습 효과를 조사해보자","디지털 교육이 집중력과 학업 성취에 미치는 영향을 분석해보자","교육 기술 도입 시 교육 격차 문제를 해결하는 방안을 탐구해보자"]},
+{id:8,c:"교육",t:"대입 수능 절대평가 도입해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.07.15",p:"과도한 경쟁을 완화하고 협력적 학습 문화를 형성할 수 있다.",n:"절대평가 기준 설정이 어렵고 대학 변별력이 떨어진다.",k:["수능","절대평가","입시 경쟁","교육 개혁","대학 입시"],q:["수능 절대평가 도입 논의의 역사와 현황을 조사해보자","절대평가와 상대평가의 장단점을 비교해보자","입시 제도 변화가 교육 현장에 미치는 영향을 탐구해보자"]},
+{id:9,c:"교육",t:"자사고·특목고 폐지해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.06.05",p:"교육 불평등을 심화시키고 일반고를 황폐화하는 서열 구조를 없애야 한다.",n:"다양하고 특성화된 교육 기회를 제공하며 우수 인재 육성에 기여한다.",k:["자사고","특목고","교육 평등","학교 다양성","입시 경쟁"],q:["자사고·특목고 도입 이후 교육 현장 변화를 분석해보자","학교 유형 다양화가 교육 격차에 미치는 영향을 조사해보자","교육 형평성과 우수 인재 육성의 균형을 탐구해보자"]},
+{id:10,c:"교육",t:"고교 내신 절대평가 전환해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.05.22",p:"지나친 경쟁 완화와 협력 학습 문화 조성에 효과적이다.",n:"학교별 변별력이 사라져 내신 신뢰도가 낮아지고 수능 의존도가 높아진다.",k:["내신 절대평가","고교 교육","입시 제도","학업 스트레스","공정성"],q:["고교 내신 평가 방식 변화 역사를 조사해보자","절대평가 전환이 학교 현장에 미치는 영향을 분석해보자","공정한 대입 평가 방식을 탐구해보자"]},
+{id:11,c:"교육",t:"신규 교사 임용 축소, 불가피한가?",u:"https://sgsg.hankyung.com/article/2025082994341",date:"2025.08.29",p:"학령인구 감소에 맞춰 교원 수요도 줄이는 게 합리적이다.",n:"현장 결원이 심한 상황에서 임용을 줄이면 교육의 질이 떨어진다.",k:["교원 수급","학령인구 감소","교육 재정","임용 시험","교육의 질"],q:["학령인구 감소 추이와 교원 수급 전망을 분석해보자","학급당 학생 수와 교육의 질의 관계를 연구해보자","다른 나라의 교원 수급 정책 사례를 비교해보자"]},
+{id:12,c:"교육",t:"대학 서열화 해소해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.04.18",p:"지나친 대학 서열화는 과도한 입시 경쟁을 만들고 교육 다양성을 해친다.",n:"대학 간 경쟁이 교육의 질 향상을 이끌며 인위적 서열 해소는 현실적이지 않다.",k:["대학 서열화","입시 경쟁","교육 다양성","명문대","지방대"],q:["한국 대학 서열화의 역사와 현황을 조사해보자","대학 서열화가 사회 불평등에 미치는 영향을 분석해보자","해외의 대학 평준화 또는 특성화 정책 사례를 비교해보자"]},
+{id:13,c:"교육",t:"교육청 예산으로 운전면허 학원비까지 지원?",u:"https://sgsg.hankyung.com/article/2025091948371",date:"2025.09.19",p:"사회 진출을 앞둔 학생을 지원하고 학부모 교육비 부담을 줄일 수 있다.",n:"교육교부금의 목적을 벗어난 교육 포퓰리즘이다.",k:["교육교부금","교육 복지","사교육비","학생 지원","교육 재정"],q:["교육교부금의 목적과 사용 현황을 조사해보자","학령인구 감소와 교육 재정 운용 방향을 분석해보자","교육 복지 확대의 긍정·부정 사례를 비교해보자"]},
+{id:14,c:"교육",t:"메타버스·XR 교육 도입해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.03.10",p:"가상 공간에서의 실감 교육으로 학습 효과와 참여도를 높일 수 있다.",n:"기기 비용이 크고 디지털 의존도와 시력·건강 문제를 악화시킨다.",k:["메타버스","XR 교육","에듀테크","실감 교육","디지털 격차"],q:["메타버스·XR 교육의 국내외 도입 사례를 조사해보자","가상현실이 학습 효과에 미치는 영향을 분석해보자","디지털 교육의 형평성 문제와 해결 방안을 탐구해보자"]},
+{id:15,c:"경제",t:"놀이공원 우선탑승권, 정당한가?",u:"https://sgsg.hankyung.com/article/2026052237371",date:"2026.05.22",p:"돈으로 시간을 사는 합리적 소비다. 시장의 자연스러운 서비스 차별화다.",n:"돈으로 새치기를 정당화한다. 경제력에 따른 차별적 서비스는 공정성 문제를 낳는다.",k:["소비자 주권","경제적 불평등","공정성","시장경제","가격차별"],q:["우선탑승권이 소비자 후생에 미치는 영향을 분석해보자","가격 차별화 서비스의 효율성과 형평성을 비교해보자","해외 테마파크 우선탑승 정책을 조사해보자"]},
+{id:16,c:"경제",t:"지역별 전기료 차등제 필요한가?",u:"https://sgsg.hankyung.com/article/2026040365511",date:"2026.04.03",p:"전력 소비의 수도권 쏠림을 해소하고 기업 이전으로 지역 경제를 활성화할 수 있다.",n:"수도권 기업의 원가 부담이 늘어 경쟁력이 떨어질 수 있다.",k:["에너지 정책","지역 균형 발전","전기요금","수도권 집중","지산지소"],q:["한국 전력 시스템의 지역별 수급 불균형을 분석해보자","해외 지역별 전기요금 차등제 사례를 조사해보자","전기요금 차등제가 산업 입지에 미치는 영향을 탐구해보자"]},
+{id:17,c:"경제",t:"석유제품 최고가격제, 꼭 필요할까?",u:"https://sgsg.hankyung.com/article/2026031385831",date:"2026.03.13",p:"비상사태에서 서민 물가 안정을 위해 불가피한 조치다.",n:"인위적 가격 통제는 공급 감소·암시장 등 부작용을 낳는다.",k:["가격 통제","유가 충격","물가 안정","시장 왜곡","에너지 정책"],q:["역사상 가격 통제 정책의 성공·실패 사례를 비교해보자","국제유가 상승이 한국 경제에 미치는 파급 효과를 분석해보자","에너지 위기 대응 정책 수단을 탐구해보자"]},
+{id:18,c:"경제",t:"대형마트 새벽 배송 허용해야 하나?",u:"https://sgsg.hankyung.com/article/2026022031651",date:"2026.02.20",p:"소비자 편익을 위해 낡은 영업시간 규제를 철폐해야 한다. 온라인과의 역차별도 해소된다.",n:"소상공인·자영업자의 골목상권이 침해되고 노동자 건강권이 위협된다.",k:["유통 규제","소비자 편익","골목상권","온라인 쇼핑","역차별"],q:["대형마트 영업시간 규제가 전통시장에 미친 영향을 분석해보자","온라인·오프라인 유통 간 경쟁 구도 변화를 조사해보자","소비자 후생과 소상공인 보호 사이의 균형을 탐구해보자"]},
+{id:19,c:"경제",t:"주간 아파트값 통계조사, 폐지해야 하나?",u:"https://sgsg.hankyung.com/article/2025103151491",date:"2025.10.31",p:"정확성 부족 통계가 시장 심리를 왜곡하고 투기 수요를 자극한다.",n:"주간 단위 정보 제공이 시장 투명성을 높이고 정책 대응 속도를 빠르게 한다.",k:["부동산 통계","시장 심리","아파트 가격","통계 정확성","부동산 정책"],q:["주간 아파트 통계가 부동산 시장 심리에 미치는 영향을 분석해보자","해외 국가의 부동산 가격 통계 주기를 비교해보자","부동산 시장 안정을 위한 통계 공개 방식을 탐구해보자"]},
+{id:20,c:"경제",t:"금산분리 규제, 이제 풀어야 하나?",u:"https://sgsg.hankyung.com/article/2025101749971",date:"2025.10.17",p:"디지털전환 시대에 금융과 산업의 융합을 막는 시대착오적 규제다.",n:"금융자본과 산업자본의 결합은 경제력 집중과 금융 시스템 위험을 키운다.",k:["금산분리","핀테크","산업자본","금융 규제","경제력 집중"],q:["금산분리 규제 도입 배경과 역사를 조사해보자","해외 주요국의 금산분리 규제 현황을 비교해보자","AI 시대 금융·산업 융합의 필요성과 위험성을 탐구해보자"]},
+{id:21,c:"경제",t:"주 4.5일 근무제 도입해도 되나?",u:"https://sgsg.hankyung.com/article/2025091296671",date:"2025.09.12",p:"근로자 삶의 질 향상과 생산성 증대를 동시에 이룰 수 있다.",n:"기업 인건비 부담 증가와 중소기업·서비스업의 현실적 어려움이 크다.",k:["근로시간 단축","주4.5일제","노동 생산성","일·생활 균형","노동 정책"],q:["주4일제를 도입한 국가와 기업의 실제 효과를 조사해보자","한국의 장시간 노동 문제와 노동 생산성의 관계를 분석해보자","근로시간 단축이 고용과 경제에 미치는 영향을 탐구해보자"]},
+{id:22,c:"경제",t:"'990원 소금빵' 초저가 빵집, 괜찮을까?",u:"https://sgsg.hankyung.com/article/2025090546971",date:"2025.09.05",p:"소비자 후생과 시장 혁신을 위한 가격 경쟁은 긍정적이다.",n:"자영업자의 생존을 위협하는 불공정 경쟁이 될 수 있다.",k:["가격 경쟁","소비자 후생","자영업","시장 혁신","인플루언서 사업"],q:["국내 소상공인의 경영 현황과 폐업 요인을 분석해보자","가격 파괴 전략이 시장에 미치는 영향을 탐구해보자","소비자 후생과 소상공인 생존권의 균형점을 탐구해보자"]},
+{id:23,c:"경제",t:"주식 양도세 대주주 기준 강화해야 할까?",u:"https://sgsg.hankyung.com/article/2025081525811",date:"2025.08.15",p:"소득 있는 곳에 세금이 있어야 한다는 조세 정의 원칙에 부합한다.",n:"증세 효과는 별로 없이 주식시장 변동성만 키울 것이다.",k:["주식 양도세","조세 정의","자본이득세","대주주 기준","주식시장"],q:["주식 양도세 기준 변화가 주식시장에 미치는 영향을 분석해보자","해외 주요국의 자본이득세 제도를 비교해보자","조세 정의와 시장 효율성의 균형을 탐구해보자"]},
+{id:24,c:"경제",t:"양곡관리법, 개정해야 하나?",u:"https://sgsg.hankyung.com/article/2025070479911",date:"2025.07.04",p:"쌀값 불안정 해소와 식량안보를 위해 정부의 의무적 수매가 필요하다.",n:"쌀 과잉생산을 조장해 정부의 재정 부담만 높인다.",k:["양곡관리법","식량안보","쌀값","정부 수매","농업 정책"],q:["쌀 생산·소비 추이와 가격 변동성을 분석해보자","해외 주요국의 곡물 수급 관리 방식을 비교해보자","식량안보와 재정 부담의 균형을 탐구해보자"]},
+{id:25,c:"경제",t:"재건축 임대주택 배치 자율성 보장해야 하나?",u:"https://sgsg.hankyung.com/article/2025062079951",date:"2025.06.20",p:"임대주택 배치 강제는 조합원 재산권을 침해하고 사업 수익성을 악화시킨다.",n:"소셜믹스는 사회적 통합을 위한 필수 정책이다. 자율화하면 주거 분리가 심화된다.",k:["소셜믹스","재건축","임대주택","사유재산","주거 평등"],q:["소셜믹스 정책의 취지와 실제 효과를 분석해보자","해외 공공임대주택 혼합 배치 사례를 조사해보자","주거 통합과 재산권 보호의 균형을 탐구해보자"]},
+{id:26,c:"경제",t:"임대차 2법 개편해야 하나?",u:"https://sgsg.hankyung.com/article/2025041806121",date:"2025.04.18",p:"이중 가격, 전세 매물 감소 등 부작용이 크고 임대인 재산권을 과도하게 침해한다.",n:"세입자의 거주 안정성을 보장하는 필수 제도다.",k:["임대차 2법","전월세상한제","계약갱신청구권","주거 안정","부동산 규제"],q:["임대차 2법 도입 전후의 전월세 가격 변동을 분석해보자","해외 임차인 보호 제도를 비교해보자","세입자 보호와 임대인 재산권의 균형점을 탐구해보자"]},
+{id:27,c:"경제",t:"부동산 임장비 도입해야 하나?",u:"https://sgsg.hankyung.com/article/2025053055711",date:"2025.05.30",p:"매수 의사 없는 임장 크루 증가로 공인중개사 업무 부담이 크다.",n:"집 보기에 비용을 부과하면 소비자 불편이 커지고 거래가 위축된다.",k:["임장비","공인중개사","부동산 거래","소비자 권리","서비스 비용"],q:["부동산 임장 문화와 공인중개사 업무 현황을 조사해보자","해외 부동산 중개 서비스 비용 구조를 비교해보자","소비자 편의와 중개사 권리의 균형점을 탐구해보자"]},
+{id:28,c:"경제",t:"최저임금 차등 적용해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.05.08",p:"지역별·업종별 경제 여건이 다른데 일률적 최저임금은 지방 소기업에 과부담이다.",n:"차등 적용은 저임금 노동자를 더 착취할 수 있는 빌미가 된다.",k:["최저임금","지역별 임금","노동 형평성","소기업 부담","임금 정책"],q:["지역별 최저임금 차등 적용 국가의 사례를 조사해보자","최저임금 인상이 고용과 소득에 미치는 영향을 분석해보자","최저임금 결정 방식의 다양한 모델을 비교해보자"]},
+{id:29,c:"경제",t:"부유세 도입해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.01.17",p:"자산 불평등 해소를 위해 초고자산가에게 별도 세금이 필요하다.",n:"자본 유출과 투자 위축, 이중 과세 문제가 생긴다.",k:["부유세","자산 불평등","조세 정의","자본 도피","소득 재분배"],q:["자산 불평등의 원인과 현황을 분석해보자","부유세를 도입한 국가의 효과와 부작용을 조사해보자","소득 재분배 수단으로서 부유세의 타당성을 탐구해보자"]},
+{id:30,c:"환경·윤리",t:"동물원, 폐지해야 하나?",u:"https://sgsg.hankyung.com/article/2026052961961",date:"2026.05.29",p:"야생동물의 자유를 박탈하는 반생명적 공간이다. 이상행동은 극심한 스트레스의 증거다.",n:"교육적 가치와 멸종 위기종 보호의 공익적 순기능이 있다.",k:["동물 복지","멸종 위기종","생태 교육","동물권","야생동물 보호"],q:["동물원 동물의 복지 실태와 이상행동 원인을 분석해보자","동물원의 멸종 위기종 보호 기여 사례를 조사해보자","동물원 대안(VR·자연보호구역 등)을 탐색해보자"]},
+{id:31,c:"환경·윤리",t:"신규 원전 건설해야 하나?",u:"https://sgsg.hankyung.com/article/2026011645331",date:"2026.01.16",p:"AI 시대 전력 수요 급증에 대응하고 탄소중립 실현을 위한 현실적 대안이다.",n:"사고 위험성과 방사성 폐기물 처리 문제가 해결되지 않았다.",k:["원자력","탄소중립","에너지 안보","방사성 폐기물","재생에너지"],q:["원자력 발전의 장단점을 다른 에너지원과 비교해보자","탄소중립 달성을 위한 에너지 믹스 전략을 탐구해보자","체르노빌·후쿠시마 사고의 교훈을 정리해보자"]},
+{id:32,c:"환경·윤리",t:"플라스틱 생산 자체를 규제해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.10.24",p:"재활용만으로는 플라스틱 오염 문제를 해결할 수 없으며 생산 단계부터 줄여야 한다.",n:"플라스틱 대체재 개발 없이 생산 규제만 하면 산업 혼란이 커진다.",k:["플라스틱 오염","해양 쓰레기","생산자 책임","환경 규제","대체 소재"],q:["세계 플라스틱 오염 현황과 국내 실태를 분석해보자","플라스틱 생산·사용 규제 사례와 효과를 조사해보자","플라스틱 대체 소재 개발 현황을 탐구해보자"]},
+{id:33,c:"환경·윤리",t:"채식 급식 의무화해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.11.07",p:"탄소 발자국 감소와 동물 복지, 학생 건강을 동시에 도모할 수 있다.",n:"식단 강제는 개인 선택권을 침해하고 성장기 영양 불균형을 초래한다.",k:["채식","기후변화","급식","식품 선택권","동물 복지"],q:["채식 급식이 환경에 미치는 영향을 분석해보자","일부 지자체의 채식 급식 시범 사업 결과를 조사해보자","성장기 채식이 건강에 미치는 영향을 탐구해보자"]},
+{id:34,c:"환경·윤리",t:"낚시면허제 도입해야 하나?",u:"https://sgsg.hankyung.com/article/2025092695091",date:"2025.09.26",p:"수산자원 보호와 어업·낚시인 갈등 완화를 위해 면허제가 필요하다.",n:"과도한 규제로 낚시 산업이 위축되고 여가 권리가 침해된다.",k:["수산자원","낚시 규제","생태 보전","어업권","레저 산업"],q:["국내 연근해 수산자원 감소 현황과 원인을 분석해보자","미국·일본 낚시면허제의 운영 방식과 효과를 조사해보자","수산자원 보전과 레저 권리의 균형 방안을 탐구해보자"]},
+{id:35,c:"환경·윤리",t:"안락사 합법화해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.03.14",p:"인간의 존엄한 죽음을 선택할 권리를 인정해야 한다.",n:"생명 경시 풍조를 조장하고 취약계층이 압박받을 수 있다.",k:["안락사","존엄사","자기결정권","생명 윤리","의료 윤리"],q:["안락사를 허용한 국가의 제도와 현황을 조사해보자","죽음에 대한 자기결정권 논쟁을 철학적으로 탐구해보자","호스피스 완화의료와 안락사의 차이를 분석해보자"]},
+{id:36,c:"환경·윤리",t:"GMO 식품 표시 의무화 강화해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.08.22",p:"소비자의 알 권리와 선택권을 위해 모든 GMO 성분을 표시해야 한다.",n:"과학적으로 안전한 GMO 식품을 이유 없이 차별하고 농식품 산업을 위축시킨다.",k:["GMO","식품 표시제","소비자 알 권리","생명공학","식품 안전"],q:["GMO 식품의 안전성 논쟁을 과학적으로 분석해보자","국내외 GMO 표시 제도를 비교해보자","소비자 알 권리와 기업 부담의 균형을 탐구해보자"]},
+{id:37,c:"환경·윤리",t:"핵융합 에너지 개발에 대규모 투자해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.07.18",p:"무한한 청정 에너지 시대를 열 수 있는 인류 최대의 과학 투자 가치가 있다.",n:"실현 가능성과 시기가 불투명해 당장 필요한 재생에너지에 집중하는 게 낫다.",k:["핵융합","청정 에너지","과학 투자","에너지 정책","재생에너지"],q:["핵융합 에너지 개발 현황과 상용화 전망을 조사해보자","에너지 기술 투자의 우선순위 결정 기준을 탐구해보자","핵융합과 재생에너지의 비용·효율을 비교해보자"]},
+{id:38,c:"환경·윤리",t:"동물 실험, 전면 금지해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.05.30",p:"동물도 고통을 느끼며 대안 기술이 충분히 발달했다.",n:"신약·의료 기술 개발을 위해 아직 필수적인 과정이다.",k:["동물 실험","동물권","의료 윤리","대체 실험","신약 개발"],q:["동물 실험 현황과 대안 기술 발전 현황을 조사해보자","동물 실험 관련 국내외 규제를 비교해보자","의학 발전과 동물 복지의 균형점을 탐구해보자"]},
+{id:39,c:"환경·윤리",t:"생태계 교란 외래종 적극 퇴치해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.04.11",p:"붉은귀거북·뉴트리아 등 생태계를 파괴하는 외래종은 체계적으로 퇴치해야 한다.",n:"이미 정착한 외래종 퇴치는 비용 대비 효과가 낮고 동물 복지 문제가 있다.",k:["생태계 교란","외래종","생물 다양성","환경 보전","동물 복지"],q:["국내 외래종 생태계 교란 실태와 피해를 분석해보자","외래종 퇴치 정책의 효과와 비용을 조사해보자","생태계 보전과 동물 복지의 균형을 탐구해보자"]},
+{id:40,c:"환경·윤리",t:"탄소세 도입해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.11.14",p:"온실가스 배출 비용을 가격에 반영해야 탄소 감축 효과가 크다.",n:"산업 경쟁력을 떨어뜨리고 에너지 비용 상승으로 서민 부담이 늘어난다.",k:["탄소세","탄소 중립","기후변화","산업 경쟁력","에너지 전환"],q:["탄소세를 도입한 국가의 온실가스 감축 효과를 조사해보자","탄소세가 산업 경쟁력과 가계에 미치는 영향을 분석해보자","탄소 감축을 위한 다양한 정책 수단을 비교해보자"]},
+{id:41,c:"사회·법",t:"소년범죄 형사처벌 연령을 낮춰야 할까?",u:"https://sgsg.hankyung.com/article/2026032706371",date:"2026.03.27",p:"청소년 범죄가 흉포해지고 있으며 법의 허점을 악용하는 사례도 나타난다.",n:"청소년은 보호와 교화의 대상이며 형사처벌 강화보다 재사회화가 효과적이다.",k:["촉법소년","청소년 범죄","형사 미성년자","사법 개혁","청소년 보호"],q:["촉법소년 범죄 현황과 유형별 추이를 분석해보자","해외 소년범죄 처벌 기준을 비교해보자","청소년 재범 방지를 위한 효과적 대안을 탐구해보자"]},
+{id:42,c:"사회·법",t:"사법시험, 부활시켜야 하나?",u:"https://sgsg.hankyung.com/article/2026032045771",date:"2026.03.20",p:"사법시험은 기회의 평등 상징이었다. 로스쿨의 높은 진입장벽이 계층 이동을 막는다.",n:"로스쿨 체계를 흔들어 법조 인력 양성에 대혼란을 가져올 것이다.",k:["사법시험","로스쿨","기회의 평등","법조인","계층 이동"],q:["로스쿨 도입 이후 법조인 다양성 변화를 분석해보자","사법시험 폐지와 로스쿨 제도의 장단점을 비교해보자","법조인 선발 제도의 공정성을 다른 직역과 비교해보자"]},
+{id:43,c:"사회·법",t:"올림픽 추모 헬멧, 허락해야 할까?",u:"https://sgsg.hankyung.com/article/2026030631521",date:"2026.03.06",p:"추모 행위는 정치적 선전과 다르다. 선수의 인간적 감정을 존중해야 한다.",n:"올림픽의 정치적 중립 원칙이 있으며 다른 나라와의 형평성 문제가 생긴다.",k:["올림픽 헌장","정치적 중립","추모","스포츠와 인권","국제스포츠"],q:["올림픽에서 정치적 표현이 금지·허용된 사례를 정리해보자","스포츠와 인권의 국제 기준을 조사해보자","정치적 중립의 개념과 한계를 탐구해보자"]},
+{id:44,c:"사회·법",t:"공유 전동킥보드 퇴출해야 하나?",u:"https://sgsg.hankyung.com/article/2026022790721",date:"2026.02.27",p:"사고 위험과 보행자 위협이 심각해 규제보다 퇴출이 필요하다.",n:"라스트 마일 교통수단으로 효용이 크다. 안전 규정 강화만으로도 충분하다.",k:["개인형 이동장치","교통안전","라스트 마일","친환경 교통","규제"],q:["전동킥보드 사고 현황과 원인을 분석해보자","파리 등 해외 퇴출 사례 결과를 조사해보자","퍼스널 모빌리티의 규제 방향을 탐구해보자"]},
+{id:45,c:"사회·법",t:"아파트 반려동물 키우기 금지, 적절한가?",u:"https://sgsg.hankyung.com/article/2026013029951",date:"2026.01.30",p:"공동체 안전·위생을 위해 반려동물 사육 제한은 필요하다.",n:"개인의 주거 내 선택권을 공동체 규약으로 지나치게 제한할 수 없다.",k:["반려동물","공동주택","공동체 규약","펫팸족","주거권"],q:["아파트 내 반려동물 관련 분쟁 사례를 분석해보자","해외 공동주택의 반려동물 규정을 비교해보자","반려동물과 비반려인의 공존 기준을 탐구해보자"]},
+{id:46,c:"사회·법",t:"미국식 집단소송제 도입해야 하나?",u:"https://sgsg.hankyung.com/article/2026012384201",date:"2026.01.23",p:"소액 피해자가 실질적 구제를 받을 수 있어야 하며 기업의 도덕적 해이를 막는다.",n:"남소 가능성이 크고 기업 경영 불확실성을 높인다.",k:["집단소송","소비자 권리","기업 책임","법적 구제","개인정보"],q:["집단소송제 도입 국가의 실제 효과를 조사해보자","쿠팡 개인정보 유출 사건의 피해 현황을 분석해보자","소비자 피해 구제를 위한 법적 수단을 비교해보자"]},
+{id:47,c:"사회·법",t:"캄보디아 ODA 중단해야 하나?",u:"https://sgsg.hankyung.com/article/2025102497641",date:"2025.10.24",p:"자국민 안전을 위협하는 나라에 세금으로 원조할 이유가 없다.",n:"ODA는 외교 수단으로 중단 시 인도주의적 책임과 외교적 신뢰를 훼손한다.",k:["공적개발원조","외교","인도주의","국민 안전","캄보디아"],q:["한국의 ODA 현황과 주요 지원국을 조사해보자","ODA의 외교적 효과와 수원국 발전 기여를 분석해보자","자국민 보호와 국제 원조 의무 사이의 균형을 탐구해보자"]},
+{id:48,c:"사회·법",t:"사형제 폐지해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.01.10",p:"인간의 생명권은 국가도 박탈할 수 없으며 오판 가능성이 있다.",n:"극악한 범죄에 대한 응보와 사회 방위를 위해 사형제는 필요하다.",k:["사형제","사법 정의","생명권","오판 가능성","범죄 억제력"],q:["사형제를 폐지한 국가의 범죄율 변화를 조사해보자","사형 판결의 오판 사례를 분석해보자","사형제 대안으로서 종신형의 효과를 탐구해보자"]},
+{id:49,c:"사회·법",t:"동성혼 법제화해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.05.16",p:"헌법이 보장하는 평등권과 개인의 자유를 위해 동성 결혼도 인정해야 한다.",n:"전통적 가족 개념과 종교적 가치에 반하며 사회적 합의가 이루어지지 않았다.",k:["동성혼","평등권","성 소수자","가족 제도","종교와 법"],q:["동성혼 법제화 국가의 제도 도입 과정을 조사해보자","헌법상 평등권과 혼인 제도의 관계를 분석해보자","동성혼 관련 사회적 인식 변화 추이를 탐구해보자"]},
+{id:50,c:"사회·법",t:"군 복무 기간 단축해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.04.04",p:"저출산 시대에 청년의 경력 단절을 줄이고 경제 활동 참여 시간을 늘려야 한다.",n:"안보 여건상 충분한 훈련 기간이 필요하며 단축은 전투력 약화로 이어진다.",k:["군 복무","안보","저출산","경력 단절","모병제"],q:["한국 군 복무 기간의 역사적 변화를 조사해보자","저출산과 군 인력 수급의 관계를 분석해보자","징병제와 모병제의 장단점을 비교해보자"]},
+{id:51,c:"사회·법",t:"이민 문호 확대해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.09.11",p:"저출산·고령화로 인한 인구 감소를 이민으로 보완할 수 있다.",n:"사회 통합 비용이 크고 국내 노동자의 일자리를 위협한다.",k:["이민 정책","저출산","다문화","노동력 부족","사회 통합"],q:["저출산 대응책으로서 이민 정책의 효과를 분석해보자","이민자 사회 통합 성공·실패 사례를 비교해보자","한국 사회에 적합한 이민 모델을 탐구해보자"]},
+{id:52,c:"사회·법",t:"CCTV 설치 규제 강화해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.07.31",p:"무분별한 CCTV 확산은 감시 사회를 만들고 사생활권을 침해한다.",n:"범죄 예방과 안전을 위해 CCTV 확대는 필요하다.",k:["CCTV","프라이버시","감시 사회","범죄 예방","개인정보"],q:["국내 CCTV 설치 현황과 범죄 억제 효과를 분석해보자","CCTV 관련 사생활 침해 사례를 조사해보자","안전과 프라이버시의 균형을 위한 제도를 탐구해보자"]},
+{id:53,c:"사회·법",t:"장애인용 키오스크 의무화 해야 하나?",u:"https://sgsg.hankyung.com/article/2025040400311",date:"2025.04.04",p:"사회적 약자 배려는 국가의 의무이며 IT 인프라는 누구나 접근할 수 있어야 한다.",n:"소규모 사업자의 비용 부담이 너무 크고 현실적 적용이 어렵다.",k:["배리어프리","장애인 접근성","키오스크","사회적 약자","디지털 포용"],q:["장애인의 디지털 서비스 접근성 현황을 분석해보자","배리어프리 키오스크 의무화의 비용과 효과를 조사해보자","디지털 포용 정책의 해외 사례를 비교해보자"]},
+{id:54,c:"사회·법",t:"외국인 가사관리사 최저임금 예외 둬야 하나?",u:"https://sgsg.hankyung.com/article/2025050208381",date:"2025.05.02",p:"저출산 위기 극복을 위해 저렴한 돌봄 서비스 제공이 필요하다.",n:"국내 노동자와의 역차별이며 최저임금 원칙을 훼손한다.",k:["최저임금","외국인 노동자","저출산","돌봄 서비스","노동 형평성"],q:["싱가포르·홍콩 등 외국인 가사관리사 제도를 조사해보자","최저임금 예외가 노동시장에 미치는 영향을 분석해보자","저출산 대응을 위한 돌봄 정책의 다양한 방안을 탐구해보자"]},
+{id:55,c:"사회·법",t:"사망사고 건설사 명단 공개해야 하나?",u:"https://sgsg.hankyung.com/article/2025030788541",date:"2025.03.07",p:"매년 200명 이상의 노동자가 건설 현장에서 사망한다. 명단 공개로 사회적 책임을 유도해야 한다.",n:"기업 이미지 타격과 실효성 논란이 있으며 중대재해처벌법으로도 충분하다.",k:["건설 안전","중대재해","기업 책임","정보 공개","노동자 보호"],q:["국내 건설 현장 산업재해 현황을 분석해보자","기업 명단 공개 제도의 실효성을 다른 분야와 비교해보자","건설 현장 안전 강화를 위한 제도적 방안을 탐구해보자"]},
+{id:56,c:"사회·법",t:"음식점에 반려동물 동반 허용해야 할까?",u:"https://sgsg.hankyung.com/article/2025112811361",date:"2025.11.28",p:"반려동물을 가족으로 여기는 시대 변화를 반영해 공존의 제도화가 필요하다.",n:"위생과 안전, 비반려인 고객의 불편 문제가 있다.",k:["반려동물","위생","식품위생법","펫팸족","공존"],q:["반려동물 동반 식당의 위생 관리 기준과 해외 사례를 조사해보자","반려동물 인구 증가에 따른 서비스업 변화를 분석해보자","반려인과 비반려인의 공존 기준을 탐구해보자"]},
+{id:57,c:"사회·법",t:"기초연금 대폭 인상해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.12.18",p:"노인 빈곤율이 OECD 최고 수준이며 국가가 복지를 확대해야 한다.",n:"재정 부담이 너무 크고 부유한 노인에게까지 지급하는 것은 형평성에 맞지 않는다.",k:["기초연금","노인 빈곤","복지 재정","고령화","세대 갈등"],q:["한국 노인 빈곤율의 원인과 현황을 분석해보자","기초연금 인상의 재정적 효과를 추정해보자","해외 노인 복지 제도를 비교해보자"]},
+{id:58,c:"디지털·AI",t:"종교계의 AI 활용, 수용해야 할까?",u:"https://sgsg.hankyung.com/article/2026050835691",date:"2026.05.08",p:"복잡한 교리를 쉽게 풀어내고 성직자 부족 문제를 해결하는 대안이다.",n:"종교의 본질인 영성을 훼손한다. 인간 고유의 영적 교감을 AI가 대체할 수 없다.",k:["AI 윤리","영성","종교의 본질","기술과 인문","디지털 전환"],q:["AI 활용 종교 서비스의 국내외 사례를 분석해보자","종교에서 진정성의 의미와 AI 대체 가능성을 논해보자","AI 기술이 전통 공동체에 미치는 영향을 탐구해보자"]},
+{id:59,c:"디지털·AI",t:"청소년의 과도한 SNS 사용, 규제해야 하나?",u:"https://sgsg.hankyung.com/article/2026010907171",date:"2026.01.09",p:"SNS 중독은 사회적 위기 수준으로 국가의 청소년 보호 의무가 있다.",n:"법적 규제의 실효성이 낮고 청소년의 기본권을 침해한다.",k:["SNS 중독","청소년 보호","디지털 웰빙","알고리즘","기본권"],q:["청소년 SNS 중독의 심리적·사회적 영향을 분석해보자","호주 SNS 금지법 시행 효과와 부작용을 조사해보자","SNS 알고리즘이 중독에 미치는 영향을 탐구해보자"]},
+{id:60,c:"디지털·AI",t:"AI 화풍 저작권 인정해야 하나?",u:"https://sgsg.hankyung.com/article/2025041154051",date:"2025.04.11",p:"화풍도 창작자의 독창성 표현이므로 보호받아야 AI와 창작자가 윈윈할 수 있다.",n:"화풍은 아이디어에 가까워 저작권 보호 대상이 아니다.",k:["AI 저작권","화풍 보호","지브리 스타일","생성형 AI","창작 윤리"],q:["AI 생성물 저작권에 관한 국내외 법률 현황을 조사해보자","유명 화풍을 AI가 모방한 사례와 그 영향을 분석해보자","AI 시대 창작자 권리 보호 방안을 탐구해보자"]},
+{id:61,c:"디지털·AI",t:"딥페이크 처벌 강화해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.09.18",p:"딥페이크를 이용한 성범죄와 명예훼손이 급증하고 있어 강력한 처벌이 필요하다.",n:"기술 자체는 중립적이며 과도한 규제는 표현의 자유와 기술 발전을 저해한다.",k:["딥페이크","사이버 성범죄","AI 규제","디지털 성범죄","표현의 자유"],q:["딥페이크 성범죄 실태와 피해 현황을 분석해보자","딥페이크 처벌 관련 국내외 법률을 비교해보자","AI 기술의 오남용 방지를 위한 제도적 방안을 탐구해보자"]},
+{id:62,c:"디지털·AI",t:"AI 규제법 도입해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.11.28",p:"AI의 위험성과 윤리 문제를 법으로 규율해야 사회적 피해를 막을 수 있다.",n:"과도한 규제는 AI 산업 발전을 저해하고 글로벌 경쟁력을 떨어뜨린다.",k:["AI 규제","AI 윤리","기술 혁신","EU AI Act","산업 경쟁력"],q:["EU AI Act의 주요 내용과 국내 시사점을 조사해보자","AI 규제가 혁신에 미치는 영향을 분석해보자","국내 AI 윤리 가이드라인 현황을 탐구해보자"]},
+{id:63,c:"디지털·AI",t:"자율주행차 사고, 제조사 책임져야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.06.20",p:"운전자가 아닌 자율주행 시스템이 판단했으므로 제조사가 책임을 져야 한다.",n:"기술 불완전성을 감안해 무조건 제조사 책임은 산업 위축을 낳는다.",k:["자율주행","제조물 책임","AI 판단","교통 안전","법적 책임"],q:["자율주행차 사고 사례와 법적 쟁점을 분석해보자","자율주행차 책임 관련 해외 법률을 비교해보자","자율주행 시대의 법적 체계 정비 방안을 탐구해보자"]},
+{id:64,c:"디지털·AI",t:"인터넷 실명제 도입해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.08.21",p:"혐오 발언, 사이버 폭력, 허위 정보 유포를 줄일 수 있다.",n:"표현의 자유를 위축시키고 감시 사회로 이어질 수 있다.",k:["인터넷 실명제","사이버 폭력","표현의 자유","허위 정보","디지털 신원"],q:["한국의 인터넷 실명제 도입·폐지 역사를 조사해보자","인터넷 실명제의 효과와 부작용 사례를 분석해보자","온라인 혐오 발언 규제를 위한 대안적 방법을 탐구해보자"]},
+{id:65,c:"디지털·AI",t:"알고리즘 추천이 여론을 왜곡하는가?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.09.26",p:"에코 챔버와 필터 버블을 강화해 사회적 양극화를 심화시킨다.",n:"개인 맞춤 정보 제공으로 관심사에 부합하는 정보를 효율적으로 전달한다.",k:["알고리즘","에코 챔버","필터 버블","여론 왜곡","소셜미디어"],q:["알고리즘 추천이 개인 의견 형성에 미치는 영향을 분석해보자","에코 챔버 현상의 실증적 사례를 조사해보자","건강한 정보 생태계를 위한 알고리즘 규제 방안을 탐구해보자"]},
+{id:66,c:"정치·국제",t:"12월 3일을 공휴일로 지정하는 게 맞나?",u:"https://sgsg.hankyung.com/article/2025121297571",date:"2025.12.12",p:"민주주의 회복의 역사적 전환점을 공휴일로 기념해 후대에 계승할 수 있다.",n:"정치적 해석 차이가 크며 다른 민주화운동 기념일과의 형평성 문제가 있다.",k:["공휴일","국민주권","민주주의","기념일 정치","역사 해석"],q:["한국의 공휴일 지정 기준과 역사를 조사해보자","민주화 관련 기념일의 역사적 의미와 사회적 역할을 분석해보자","기념일의 정치화 문제를 해외 사례와 비교해보자"]},
+{id:67,c:"정치·국제",t:"국회·대통령실 세종 이전해야 하나?",u:"https://sgsg.hankyung.com/article/2025042551061",date:"2025.04.25",p:"국가 균형 발전과 행정 효율을 위해 세종 완전 이전이 필요하다.",n:"헌법적 문제와 막대한 이전 비용, 정치적 분열 우려가 있다.",k:["행정수도","세종시","균형 발전","수도권 집중","헌법"],q:["세종시 조성 배경과 현재까지의 성과를 분석해보자","행정수도 이전의 경제적 효과와 비용을 탐구해보자","수도권 집중 완화를 위한 다양한 정책 방안을 비교해보자"]},
+{id:68,c:"정치·국제",t:"선거 연령 16세로 낮춰야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.03.20",p:"청소년도 정치의 주체가 되어야 하며 그들의 미래에 관한 결정에 목소리를 낼 수 있어야 한다.",n:"정치적 판단력이 충분히 성숙되지 않은 단계에서 선거권 부여는 시기상조다.",k:["선거 연령","청소년 참정권","민주주의","정치 교육","시민 의식"],q:["선거 연령 16세를 도입한 나라의 효과를 조사해보자","청소년의 정치적 관심도와 판단력을 분석해보자","청소년 참정권 확대의 긍정·부정 사례를 탐구해보자"]},
+{id:69,c:"정치·국제",t:"검찰 수사권 완전 분리해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.10.09",p:"검찰이 수사와 기소를 독점하는 구조는 권력 남용을 낳는다.",n:"수사와 기소의 완전 분리는 범죄 대응 효율성을 떨어뜨리고 새로운 권력 갈등을 낳는다.",k:["검찰 개혁","수사권","기소권","권력 분산","법치주의"],q:["검찰 수사권 조정의 역사와 현황을 조사해보자","수사·기소 분리 제도를 운영하는 해외 국가 사례를 비교해보자","검찰 개혁이 사법 정의에 미치는 영향을 탐구해보자"]},
+{id:70,c:"정치·국제",t:"비례대표제 확대해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.05.30",p:"다양한 정치 세력의 의회 진출을 가능하게 해 민의를 더 잘 반영한다.",n:"군소 정당 난립으로 정치 불안정이 심화될 수 있다.",k:["비례대표제","선거 제도","정당 정치","다당제","민주주의"],q:["비례대표제를 확대한 국가의 정치 변화를 분석해보자","한국 선거 제도의 역사와 문제점을 조사해보자","민의를 더 잘 반영하는 선거 제도를 탐구해보자"]},
+{id:71,c:"정치·국제",t:"북한과의 인도주의적 협력 재개해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.07.25",p:"북한 주민의 인권과 인도주의적 위기 해소를 위해 협력을 재개해야 한다.",n:"핵 개발 지속 상황에서의 협력은 김정은 정권만 강화시킨다.",k:["대북 정책","인도주의","한반도 평화","제재","북한 인권"],q:["남북 인도주의 협력의 역사와 성과를 조사해보자","대북 제재와 인도주의 지원의 양립 방안을 분석해보자","한반도 평화를 위한 단계적 협력 방안을 탐구해보자"]},
+{id:72,c:"문화·미디어",t:"광화문에 한글 현판을 달아야 할까?",u:"https://sgsg.hankyung.com/article/2026041015601",date:"2026.04.10",p:"국가 정체성을 위해 국가 상징 공간에 한글이 있어야 한다.",n:"문화유산 원형 보존 원칙에 어긋나며 역사적 진정성이 훼손된다.",k:["문화유산","국가 정체성","한글","문화재 보존","역사성"],q:["광화문 현판 논란의 역사를 시대별로 정리해보자","문화유산 보존과 현대적 재해석 사례를 비교해보자","한글의 상징성과 국가 정체성의 관계를 탐구해보자"]},
+{id:73,c:"문화·미디어",t:"국립중앙박물관 유료화해야 하나?",u:"https://sgsg.hankyung.com/article/2025121933561",date:"2025.12.19",p:"입장료 수입으로 전시 수준을 높이고 과밀 방문객 문제를 해소할 수 있다.",n:"보편적 문화 향유권을 보장해야 하며 공공 박물관의 공공적 가치가 있다.",k:["문화 향유권","공공 박물관","박물관 재정","관람객 관리","공공 서비스"],q:["세계 주요 박물관의 유·무료 정책을 비교해보자","박물관 유료화가 방문객 수와 계층 다양성에 미치는 영향을 분석해보자","박물관 공공성을 유지하면서 재정을 개선하는 방안을 탐구해보자"]},
+{id:74,c:"문화·미디어",t:"AI로 연기 보정한 배우, 아카데미 수상 적절한가?",u:"https://sgsg.hankyung.com/article/2025031439741",date:"2025.03.14",p:"AI는 영화 발전을 위한 신기술이며 연기의 본질이 훼손된 것은 아니다.",n:"예술성과 진정성을 평가하는 시상식에서 AI 보조는 공정성을 훼손한다.",k:["AI와 예술","아카데미","창작 윤리","디지털 기술","영화 산업"],q:["영화 산업에서 AI 기술 활용 사례를 조사해보자","AI 보조 창작물의 예술적 가치를 어떻게 평가할지 탐구해보자","CG·AI 기술 발전이 영화 산업에 미치는 영향을 분석해보자"]},
+{id:75,c:"문화·미디어",t:"국내 영화 스크린 쿼터제 유지해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.02.06",p:"한국 영화 산업 보호와 문화 다양성을 위해 스크린 쿼터 유지가 필요하다.",n:"경쟁력 있는 작품은 시장에서 스스로 살아남아야 하며 규제는 비효율을 낳는다.",k:["스크린 쿼터","한국 영화","문화 보호","문화 다양성","할리우드"],q:["스크린 쿼터제 도입 이후 한국 영화 산업 변화를 분석해보자","해외 영화 보호 정책 사례를 비교해보자","BTS·기생충 이후 달라진 한국 문화 경쟁력을 탐구해보자"]},
+{id:76,c:"문화·미디어",t:"K-POP 아이돌 군 복무 면제 줘야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.03.06",p:"BTS 등 한류 스타의 국위 선양 기여도는 군 복무 면제에 충분한 근거가 된다.",n:"국방 의무는 평등해야 하며 특혜는 사기를 저하시킨다.",k:["군 복무","K-POP","병역 특례","한류","평등"],q:["현행 병역 특례 제도의 현황과 기준을 조사해보자","K-POP의 경제적·외교적 가치를 분석해보자","공정한 병역 특례 기준 설정 방안을 탐구해보자"]},
+{id:77,c:"문화·미디어",t:"대학 축제, 고액 들여 아이돌 불러야 하나?",u:"https://sgsg.hankyung.com/article/2025051668991",date:"2025.05.16",p:"공동체 의식 함양과 학교 이미지 제고에 효과적이다.",n:"대학 재정난에서 연예인 공연에 막대한 자금을 쓰는 것은 부적절하다.",k:["대학 문화","축제 예산","공동체 의식","연예인 섭외","교육 재정"],q:["대학 축제 예산 규모와 효과를 조사해보자","대학 공동체 의식 형성의 다양한 방법을 탐구해보자","대학 축제 문화의 변화와 문제점을 분석해보자"]},
+{id:78,c:"문화·미디어",t:"세운상가 재개발, 허용해야 하나?",u:"https://sgsg.hankyung.com/article/2025111434951",date:"2025.11.14",p:"낙후된 도심 재활성화와 녹지축 조성을 위해 재개발이 필요하다.",n:"세계유산인 종묘의 경관을 훼손할 우려가 있다.",k:["문화재 보존","도시 재개발","종묘","역사 경관","도심 활성화"],q:["세계유산 주변 개발 규제의 국제 기준을 조사해보자","도시 재개발과 문화유산 보존의 공존 사례를 분석해보자","서울 도심 재개발의 역사와 문제점을 탐구해보자"]},
+{id:79,c:"보건·의료",t:"설탕세, 도입해야 하나?",u:"https://sgsg.hankyung.com/article/2025082251491",date:"2025.08.22",p:"청소년 당분 과다 섭취를 억제하고 비만·당뇨 예방에 효과적이다.",n:"소비자 선택권을 침해하고 저소득층에게 더 큰 부담이 된다.",k:["설탕세","비만 예방","건강 세금","소비자 선택권","공중보건"],q:["설탕세를 도입한 국가의 건강 지표 변화를 분석해보자","가당 음료 소비와 청소년 건강의 상관관계를 조사해보자","건강 세금의 형평성 문제를 탐구해보자"]},
+{id:80,c:"보건·의료",t:"공공의대 설립해야 하나?",u:"https://sgsg.hankyung.com/article/2025061326691",date:"2025.06.13",p:"지방 의료 공백을 메우려면 의무 복무 공공의사 양성이 필요하다.",n:"의사 반발이 거세고 의료 인력 배분 문제를 근본적으로 해결하지 못한다.",k:["공공의대","지방 의료","의사 부족","의료 공공성","의료 개혁"],q:["국내 지역별 의료 인력 분포의 불균형을 분석해보자","해외 공공의사 양성 제도 사례를 조사해보자","지방 의료 공백을 해결하기 위한 다양한 방안을 탐구해보자"]},
+{id:81,c:"보건·의료",t:"의대 증원 계속해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.02.14",p:"의사 부족 문제를 해결하고 필수의료 붕괴를 막기 위해 증원이 필요하다.",n:"급격한 증원은 교육의 질을 떨어뜨리고 의대 쏠림 현상을 심화시킨다.",k:["의대 증원","필수의료","의사 수급","의료 개혁","교육의 질"],q:["OECD 대비 한국 의사 수 현황을 분석해보자","의대 증원이 교육 현장에 미치는 영향을 조사해보자","필수의료 붕괴의 원인과 해결 방안을 탐구해보자"]},
+{id:82,c:"보건·의료",t:"원격 진료 전면 허용해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.04.11",p:"도서산간 지역 주민과 거동 불편 환자에게 의료 접근성을 획기적으로 높일 수 있다.",n:"오진 위험이 크고 동네 의원·병원의 경영 위기를 초래한다.",k:["원격 진료","의료 접근성","비대면 의료","오진","의료법"],q:["원격 진료 도입 현황과 해외 사례를 조사해보자","원격 진료의 효과와 부작용을 분석해보자","한국 의료 체계에 맞는 원격 진료 도입 방안을 탐구해보자"]},
+{id:83,c:"보건·의료",t:"저출산 대책, 현금지원 vs 인프라 확충 무엇이 우선?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.12.25",p:"당장 아이를 낳고 기르는 비용 부담 해소를 위한 현금 지원이 더 직접적이다.",n:"근본적인 육아 여건 개선 없이 현금만 주면 효과가 없다.",k:["저출산","육아 지원","출산율","보육 인프라","인구 정책"],q:["저출산 대책의 국내외 효과를 분석해보자","현금 지원과 인프라 확충의 출산율 영향을 비교해보자","한국 저출산 문제의 근본 원인과 해결 방안을 탐구해보자"]},
+{id:84,c:"보건·의료",t:"비만 치료제 건강보험 적용해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.10.02",p:"비만은 질병이며 치료비 지원으로 의료비 절감과 삶의 질 향상을 도모할 수 있다.",n:"고가 약품 급여화는 건보 재정을 악화시키고 생활 습관 개선이 먼저다.",k:["비만 치료제","건강보험 급여","의약품 정책","만성질환","비용 효과성"],q:["비만이 초래하는 사회적·경제적 비용을 분석해보자","비만 치료제의 효과와 부작용을 조사해보자","건강보험 급여 결정 기준을 탐구해보자"]},
+{id:85,c:"보건·의료",t:"흡연 구역 폐지, 강행해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.08.01",p:"간접흡연 피해 완전 차단을 위해 공공장소 흡연 구역을 모두 없애야 한다.",n:"흡연자의 기본권을 완전히 무시하는 것이며 더 큰 문제가 생긴다.",k:["흡연","간접흡연","공중 보건","흡연권","담배 규제"],q:["공공장소 흡연 규제 강화의 효과를 분석해보자","해외 흡연 규제 정책 사례를 비교해보자","흡연자와 비흡연자가 공존하는 방안을 탐구해보자"]},
+{id:86,c:"글로벌·과학",t:"우주 탐사, 민간 기업에 맡겨야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.04.03",p:"스페이스X 사례처럼 민간의 혁신과 효율이 우주 개발을 가속화할 수 있다.",n:"우주는 인류 공동 자산이며 특정 기업이 독점해서는 안 된다.",k:["우주 탐사","민간 우주","스페이스X","우주 자원","우주법"],q:["민간 우주 기업의 성과와 문제점을 조사해보자","우주 자원 개발에 관한 국제법 현황을 분석해보자","공공과 민간이 협력하는 우주 탐사 모델을 탐구해보자"]},
+{id:87,c:"글로벌·과학",t:"인간 유전자 편집, 허용해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.06.26",p:"유전 질환 예방과 인류의 건강 개선을 위해 윤리 기준을 갖춘 유전자 편집은 허용해야 한다.",n:"디자이너 베이비 등 유전자 불평등 심화와 예기치 못한 부작용이 우려된다.",k:["유전자 편집","CRISPR","생명 윤리","디자이너 베이비","의료 혁신"],q:["유전자 편집 기술의 현황과 의료적 활용 사례를 조사해보자","인간 배아 유전자 편집에 관한 국제 규범을 분석해보자","유전자 편집의 윤리적 경계를 탐구해보자"]},
+{id:88,c:"글로벌·과학",t:"생성형 AI, 창의적 직업을 대체할 것인가?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.09.18",p:"반복적 창작 업무는 AI가 빠르게 대체하고 있으며 직업 구조의 대변혁이 불가피하다.",n:"AI는 도구일 뿐 인간의 감성과 문화적 맥락을 이해하는 창의성은 대체할 수 없다.",k:["생성형 AI","직업 대체","창의 산업","인간 창의성","기술 변화"],q:["생성형 AI로 대체 위험에 처한 창의 직업군을 조사해보자","AI와 인간 창작물의 품질을 비교한 연구를 분석해보자","AI 시대 창의 산업 종사자의 미래를 탐구해보자"]},
+{id:89,c:"글로벌·과학",t:"기후 위기 대응, 개도국에도 같은 기준 적용해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.11.06",p:"기후 위기는 모든 국가가 함께 해결해야 하며 개도국 예외는 목표 달성을 불가능하게 한다.",n:"온실가스를 주로 배출해 온 선진국이 책임지고 개도국 발전을 지원해야 한다.",k:["기후 정의","개발도상국","탄소 배출","공정한 전환","국제 협약"],q:["파리 협약의 주요 내용과 이행 현황을 조사해보자","선진국과 개도국의 탄소 배출 역사를 비교해보자","공정한 기후 대응 체계를 탐구해보자"]},
+{id:90,c:"글로벌·과학",t:"반도체 산업, 국가 보조금 경쟁 규제해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.10.30",p:"무분별한 국가 보조금 경쟁은 자유 무역 질서를 왜곡하고 경제 비효율을 낳는다.",n:"전략 산업에 대한 국가 지원은 주권 사항이며 경쟁 강화가 기술 발전을 이끈다.",k:["반도체","국가 보조금","무역 분쟁","기술 패권","산업 정책"],q:["반도체 패권 경쟁의 현황과 주요 국가 전략을 조사해보자","국가 보조금이 반도체 산업에 미치는 영향을 분석해보자","한국 반도체 산업의 경쟁력 강화 방안을 탐구해보자"]},
+{id:91,c:"글로벌·과학",t:"로봇 세금 도입해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.08.28",p:"자동화로 실직한 노동자 지원과 사회 안전망 재원 마련을 위해 로봇세가 필요하다.",n:"기술 혁신을 저해하고 기업의 자동화 투자를 위축시켜 오히려 경제 성장을 늦춘다.",k:["로봇세","자동화","일자리 소멸","사회 안전망","기술 혁신"],q:["자동화가 일자리에 미치는 영향을 분석해보자","로봇세 도입을 논의하는 국가의 사례를 조사해보자","기술 변화 시대의 사회 안전망 재설계 방안을 탐구해보자"]},
+{id:92,c:"글로벌·과학",t:"소셜미디어 허위 정보 차단 의무화해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.12.18",p:"허위 정보로 인한 공중 보건·민주주의 위협을 막기 위해 플랫폼의 책임을 강화해야 한다.",n:"콘텐츠 검열로 표현의 자유가 침해되고 기업에 지나친 판단 권한을 부여한다.",k:["허위 정보","소셜미디어 규제","표현의 자유","콘텐츠 모더레이션","인포데믹"],q:["소셜미디어 허위 정보의 실태와 사회적 영향을 분석해보자","허위 정보 규제 관련 해외 법률 현황을 비교해보자","효과적인 허위 정보 대응 방안을 탐구해보자"]},
+{id:93,c:"글로벌·과학",t:"수소 경제, 한국이 집중 투자해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.07.31",p:"탄소 중립과 에너지 안보를 위해 수소는 한국의 핵심 미래 에너지 전략이다.",n:"수소 생산 비용이 여전히 높아 단기적으로는 다른 에너지원이 더 효율적이다.",k:["수소 경제","에너지 안보","탄소 중립","그린 수소","에너지 전환"],q:["한국의 수소 경제 로드맵과 현황을 조사해보자","수소 에너지의 생산·저장·운반 기술 현황을 분석해보자","수소 경제 활성화를 위한 전략을 탐구해보자"]},
+{id:94,c:"글로벌·과학",t:"비트코인을 법정화폐로 인정해야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.01.23",p:"엘살바도르 사례처럼 금융 포용성 향상과 인플레이션 대비책이 될 수 있다.",n:"극도의 가격 변동성으로 일상 거래 수단으로 부적합하고 화폐 주권을 훼손한다.",k:["비트코인","법정화폐","암호화폐","금융 포용","통화 주권"],q:["비트코인 법정화폐 도입 사례와 결과를 조사해보자","암호화폐가 기존 금융 시스템에 미치는 영향을 분석해보자","미래 화폐 체계의 변화를 탐구해보자"]},
+{id:95,c:"글로벌·과학",t:"핵 보유국 확대를 막아야 하나?",u:"https://sgsg.hankyung.com/series/1509001006",date:"2025.05.01",p:"핵 확산은 군사 충돌과 핵전쟁 위험을 높이므로 강력히 막아야 한다.",n:"강대국의 핵 독점이 오히려 불공정하며 자국 방어를 위한 핵 개발은 주권 사항이다.",k:["핵 비확산","NPT","핵 억지력","군비 통제","국제 안보"],q:["핵 비확산 조약(NPT)의 역사와 현황을 조사해보자","핵 보유국 확대의 안보적 영향을 분석해보자","핵 없는 세계를 위한 국제 협력 방안을 탐구해보자"]}
+];
+
+// ===== 상태 =====
+const STEPS=[
+  {ico:"📰",lbl:"주제 파악",desc:"배경과 핵심 쟁점 이해"},
+  {ico:"⚖️",lbl:"찬반 분석",desc:"양측 논거 직접 분석"},
+  {ico:"🔍",lbl:"탐구 설계",desc:"탐구 주제·방법 계획"},
+  {ico:"✏️",lbl:"내 의견",desc:"근거 있는 입장 서술"},
+  {ico:"✅",lbl:"마무리",desc:"점검·소감 작성"}
+];
+const allCats=["전체",...Object.keys(CC)];
+let curT=null,curS=0,stance=null,chkSt=[false,false,false,false,false];
+let activeCat="전체";
+const UD={};
+function gD(id){if(!UD[id])UD[id]={s0:"",s1p:"",s1c:"",rQ:"",rM:"",mA:"",cA:"",ref:"",stance:null,chk:[false,false,false,false,false]};return UD[id];}
+
+// ===== 인트로 =====
+function initPart(){const w=document.getElementById("particles");for(let i=0;i<12;i++){const p=document.createElement("div");p.className="particle";const s=Math.random()*4+2;p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${Math.random()*3+3}s;--dl:${Math.random()*4}s;`;w.appendChild(p);}}
+function startApp(){const el=document.getElementById("intro");el.classList.add("exit");setTimeout(()=>{el.style.display="none";document.getElementById("app").style.display="block";document.body.style.overflow="auto";initApp();},1100);}
+document.addEventListener("keydown",e=>{if((e.key===" "||e.key==="Enter")&&document.getElementById("intro").style.display!=="none")startApp();});
+
+// ===== 앱 =====
+function initApp(){renderCats();filterT();}
+function renderCats(){document.getElementById("catRow").innerHTML=allCats.map(c=>`<button class="cat-btn${c===activeCat?" on":""}" onclick="setCat('${c}')">${c}</button>`).join("");}
+function setCat(c){activeCat=c;renderCats();filterT();}
+function filterT(){
+  const q=document.getElementById("srch").value.toLowerCase();
+  const f=T.filter(t=>{const co=activeCat==="전체"||t.c===activeCat;const so=!q||t.t.toLowerCase().includes(q)||t.k.some(k=>k.toLowerCase().includes(q));return co&&so;});
+  document.getElementById("tCount").textContent=`${f.length}개 주제`;
+  if(!f.length){document.getElementById("tList").innerHTML=`<div style="text-align:center;padding:20px;color:#aaa;font-size:13px">검색 결과 없음</div>`;return;}
+  document.getElementById("tList").innerHTML=f.map(t=>`<div class="tc${curT&&curT.id===t.id?" on":""}" onclick="selT(${t.id})"><div class="tc-l"><span class="tc-tag" style="background:${CC[t.c]?.bg||"#f5f5f5"};color:${CC[t.c]?.tx||"#333"}">${t.c}</span><div class="tc-title">${t.t}</div><div class="tc-date">📅 ${t.date}</div></div><a class="tc-lnk" href="${t.u}" target="_blank" rel="noopener" title="생글생글 원문 보기" onclick="event.stopPropagation()">🔗</a></div>`).join("");
+}
+function selT(id){curT=T.find(t=>t.id===id);curS=0;stance=gD(id).stance;chkSt=[...gD(id).chk];filterT();document.getElementById("mainArea").innerHTML=buildMain();document.getElementById("mainArea").scrollIntoView({behavior:"smooth",block:"start"});}
+
+function buildMain(){
+  const t=curT,cc=CC[t.c]||{bg:"#f5f5f5",tx:"#333"};
+  return `<div class="thc"><div class="thc-top"><span class="thc-cat-tag" style="background:${cc.bg};color:${cc.tx}">${t.c}</span><span class="thc-date">📅 ${t.date}</span></div><div class="thc-title">${t.t}</div><a class="thc-lnk" href="${t.u}" target="_blank" rel="noopener">🔗 한국경제 생글생글 원문 기사 보기 →</a><div class="thc-src">출처: 한국경제신문 생글생글 | Copyright © All Teachers</div></div>
+  <div class="prog"><div class="prog-f" id="progF" style="width:${(curS+1)/STEPS.length*100}%"></div></div>
+  <div class="step-nav">${STEPS.map((s,i)=>`<button class="step-btn${i===curS?" on":""}" onclick="goS(${i})"><span class="step-n">${i+1}</span><span class="step-ico">${s.ico}</span><span>${s.lbl}</span></button>`).join("")}</div>
+  <div class="act" id="actCard">${buildStep()}</div>`;
+}
+function goS(i){saveInp();curS=i;document.getElementById("mainArea").innerHTML=buildMain();}
+function saveInp(){
+  if(!curT)return;const d=gD(curT.id);const g=id=>{const e=document.getElementById(id);return e?e.value:"";};
+  if(curS===0)d.s0=g("i0");
+  else if(curS===1){d.s1p=g("i1p");d.s1c=g("i1c");}
+  else if(curS===2){d.rQ=g("rQ");d.rM=g("rM");}
+  else if(curS===3){d.mA=g("mA");d.cA=g("cA");d.stance=stance;}
+  else if(curS===4){d.ref=g("rf");d.chk=[...chkSt];}
+}
+function buildStep(){
+  const t=curT,s=STEPS[curS],d=gD(t.id);
+  let h=`<div class="act-head"><div class="act-ico">${s.ico}</div><div><h3>${curS+1}단계: ${s.lbl}</h3><p>${s.desc}</p></div></div>`;
+  if(curS===0){
+    h+=`<div class="sl">📌 핵심 키워드</div><div class="kw-wrap">${t.k.map(k=>`<span class="kw">${k}</span>`).join("")}</div>
+    <div class="sl">💡 탐구 전 질문 (미리 생각해보세요)</div><ul class="ql">${t.q.map((q,i)=>`<li class="qi"><span class="qn">${i+1}</span>${q}</li>`).join("")}</ul>
+    <div class="sl">📝 내가 이미 아는 것 / 궁금한 점</div><textarea id="i0" rows="4" placeholder="이 주제에 대해 알고 있는 배경지식이나 궁금한 점을 자유롭게 써보세요...">${d.s0}</textarea>`;
+  } else if(curS===1){
+    h+=`<div class="sl">⚖️ 찬반 핵심 논거</div><div class="db-row"><div class="db pro"><div class="db-lbl">👍 찬성</div><p>${t.p}</p></div><div class="db con"><div class="db-lbl">👎 반대</div><p>${t.n}</p></div></div>
+    <div class="sl">📝 내가 추가로 찾은 찬성 논거</div><textarea id="i1p" rows="3" placeholder="신문 기사, 교과서, 인터넷 조사 등을 통해 찾은 찬성 논거를 써보세요...">${d.s1p}</textarea>
+    <div class="sl">📝 내가 추가로 찾은 반대 논거</div><textarea id="i1c" rows="3" placeholder="신문 기사, 교과서, 인터넷 조사 등을 통해 찾은 반대 논거를 써보세요...">${d.s1c}</textarea>`;
+  } else if(curS===2){
+    h+=`<div class="sl">💡 탐구 질문 예시 (클릭하면 입력)</div><ul class="ql">${t.q.map((q,i)=>`<li class="qi"><span class="qn">${i+1}</span><span style="cursor:pointer;color:#4338ca;text-decoration:underline" onclick="fillQ('${q.replace(/'/g,"\\'")}')"> ${q}</span></li>`).join("")}</ul>
+    <div class="sl">📝 나의 탐구 주제</div><textarea id="rQ" rows="2" placeholder="탐구 주제를 직접 작성해보세요 (예: ○○이 △△에 미치는 영향을 조사한다)">${d.rQ}</textarea>
+    <div class="sl">📝 탐구 방법 계획</div><textarea id="rM" rows="3" placeholder="어떻게 탐구할 건가요? (예: 설문조사 20명 대상, 신문 기사 10개 분석, 통계 조사 등)">${d.rM}</textarea>`;
+  } else if(curS===3){
+    h+=`<div class="sl">✋ 나의 입장</div><div class="stance-row"><button class="sbtn pro-s${stance==="pro"?" on":""}" onclick="setS('pro')">👍 찬성</button><button class="sbtn con-s${stance==="con"?" on":""}" onclick="setS('con')">👎 반대</button></div>
+    <div class="sl">📝 나의 주장과 근거 (2~3가지)</div><textarea id="mA" rows="5" placeholder="예) 나는 ○○에 찬성/반대한다. 왜냐하면 첫째, ... 둘째, ... 셋째, ... 따라서 ...">${d.mA}</textarea>
+    <div class="sl">📝 예상 반론에 대한 나의 대응</div><textarea id="cA" rows="3" placeholder="반대 입장의 주장에 대해 어떻게 반박할 수 있나요?">${d.cA}</textarea>`;
+  } else {
+    const items=["토론 주제의 배경과 사회적 맥락을 이해했다","찬성과 반대 입장의 핵심 논거를 각각 파악했다","나만의 탐구 주제와 방법을 계획했다","근거를 갖춘 나의 입장을 서술했다","반론을 예상하고 대응 방안을 생각해봤다"];
+    h+=`<div class="sl">✅ 탐구 활동 체크리스트</div><ul class="chklist">${items.map((item,i)=>`<li class="chk-item"><div class="chk-box${chkSt[i]?" on":""}" onclick="tgC(${i})">${chkSt[i]?"✓":""}</div><span>${item}</span></li>`).join("")}</ul>
+    <div class="sl">💬 탐구 소감 및 새로 알게 된 점</div><textarea id="rf" rows="4" placeholder="이번 탐구활동에서 새로 알게 된 점, 더 알고 싶은 점, 느낀 점을 자유롭게 써보세요...">${d.ref}</textarea>`;
+  }
+  const pd=curS===0,nd=curS===STEPS.length-1;
+  h+=`<div class="nav-row"><button class="nb" onclick="goS(${curS-1})" ${pd?"disabled":""}>← 이전 단계</button><button class="nb pri" onclick="goS(${curS+1})" ${nd?"disabled":""}>다음 단계 →</button></div>`;
+  return h;
+}
+function fillQ(q){const t=document.getElementById("rQ");if(t)t.value=q;}
+function setS(s){saveInp();stance=s;gD(curT.id).stance=s;document.getElementById("mainArea").innerHTML=buildMain();}
+function tgC(i){chkSt[i]=!chkSt[i];gD(curT.id).chk[i]=chkSt[i];const b=document.querySelectorAll(".chk-box");if(b[i]){b[i].classList.toggle("on",chkSt[i]);b[i].innerHTML=chkSt[i]?"✓":"";}};
+
+// ===== 모달 =====
+function openMo(id){document.getElementById("mo-"+id).classList.add("open");}
+function closeMo(id){document.getElementById("mo-"+id).classList.remove("open");}
+document.querySelectorAll(".mo").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("open");}));
+
+// ===== 저장 =====
+function saveWork(){
+  saveInp();
+  const st=JSON.stringify({tid:curT?curT.id:null,cs:curS,stance,chkSt,UD,ts:new Date().toISOString()});
+  const marker=`<!--DS:${st}-->`;
+  const html=document.documentElement.outerHTML.replace(/<\/html>\s*$/,"")+"\n"+marker+"\n</html>";
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([html],{type:"text/html"}));
+  a.download=`참교육_${curT?curT.t.substring(0,12):"탐구"}_${new Date().toLocaleDateString("ko-KR").replace(/\./g,"").replace(/ /g,"")}.html`;
+  a.click();
+}
+
+// ===== 불러오기 =====
+function loadWork(){document.getElementById("fileInput").click();}
+function handleLoad(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    const html=ev.target.result;
+    const m=html.match(/<!--DS:([\s\S]*?)-->/);
+    if(!m){alert("저장된 탐구활동 파일이 아닙니다.");return;}
+    try{
+      const st=JSON.parse(m[1]);
+      Object.assign(UD,st.UD||{});
+      if(st.tid!=null){
+        curT=T.find(t=>t.id===st.tid);curS=st.cs||0;stance=st.stance;chkSt=st.chkSt||[false,false,false,false,false];
+        filterT();document.getElementById("mainArea").innerHTML=buildMain();
+        alert("✅ 불러오기 완료! 이전 작성 내용이 복원되었습니다.");
+      }
+    }catch(err){alert("파일을 읽을 수 없습니다.");}
+  };
+  r.readAsText(f);e.target.value="";
+}
+
+// ===== PDF =====
+function printPDF(){saveInp();window.print();}
+
+// ===== 발표 슬라이드 =====
+let slides=[],slIdx=0;
+function startPres(){
+  saveInp();
+  if(!curT){alert("먼저 주제를 선택하세요.");return;}
+  const t=curT,d=gD(t.id);
+  slides=[
+    `<div class="slc"><div class="sls">한국경제 생글생글 · Copyright © All Teachers</div><div class="slt"><em>참교육</em> 시사 찬반토론<br>탐구활동 발표</div><div style="width:50px;height:2px;background:#c22;margin:18px auto"></div><div class="sls" style="font-size:clamp(14px,2vw,18px);color:rgba(255,255,255,.8);margin-top:14px">${t.t}</div><div class="sld">📅 ${t.date} &nbsp;|&nbsp; 출처: 생글생글</div></div>`,
+    `<div class="sls2"><div class="sh">1단계 · 주제 파악</div><div class="sm">${t.t}</div><div class="sbody">${d.s0||"(작성 내용 없음)"}</div><div class="skw">${t.k.map(k=>`<span>${k}</span>`).join("")}</div></div>`,
+    `<div class="sls2"><div class="sh">2단계 · 찬반 논거 분석</div><div class="sm" style="font-size:clamp(14px,2.5vw,24px);margin-bottom:14px">${t.t}</div><div class="sgrid"><div class="sbox pro"><div class="sbl">👍 찬성</div><p>${t.p}</p>${d.s1p?`<p style="margin-top:7px;padding-top:7px;border-top:1px solid rgba(74,222,128,.2)">${d.s1p}</p>`:""}</div><div class="sbox con"><div class="sbl">👎 반대</div><p>${t.n}</p>${d.s1c?`<p style="margin-top:7px;padding-top:7px;border-top:1px solid rgba(248,113,113,.2)">${d.s1c}</p>`:""}</div></div></div>`,
+    `<div class="sls2"><div class="sh">3단계 · 탐구 설계</div><div class="sm" style="font-size:clamp(14px,2.5vw,24px)">나만의 탐구 계획</div>${d.rQ?`<div style="margin:12px 0 8px"><div style="font-size:10px;color:#818cf8;margin-bottom:5px">📌 탐구 주제</div><div class="su">${d.rQ}</div></div>`:""} ${d.rM?`<div><div style="font-size:10px;color:#818cf8;margin-bottom:5px">🔍 탐구 방법</div><div class="su">${d.rM}</div></div>`:""}${!d.rQ&&!d.rM?`<div class="sbody">(작성 내용 없음)</div>`:""}</div>`,
+    `<div class="sls2"><div class="sh">4단계 · 나의 입장</div><div class="sm" style="font-size:clamp(14px,2.5vw,26px)">나는 이 주제에 대해 ${d.stance==="pro"?`<span style="color:#4ade80">찬성</span>합니다`:d.stance==="con"?`<span style="color:#f87171">반대</span>합니다`:`<span style="color:#94a3b8">입장 정하는 중</span>입니다`}</div>${d.mA?`<div class="su" style="margin-top:12px">${d.mA}</div>`:""}${d.cA?`<div style="margin-top:10px"><div style="font-size:10px;color:#818cf8;margin-bottom:5px">🔄 반론 대응</div><div class="su">${d.cA}</div></div>`:""}${!d.mA&&!d.cA?`<div class="sbody">(작성 내용 없음)</div>`:""}</div>`,
+    `<div class="sls2"><div class="sh">5단계 · 탐구 마무리</div><div class="sm" style="font-size:clamp(14px,2.5vw,24px)">탐구 소감</div><div class="sbody">${d.ref||"(작성 내용 없음)"}</div><div style="margin-top:20px;text-align:center;font-size:clamp(10px,1.4vw,13px);color:rgba(255,255,255,.3)">한국경제 생글생글 | Copyright © All Teachers</div></div>`
+  ];
+  slIdx=0;document.getElementById("pres").style.display="flex";renderSl();
+}
+function renderSl(){
+  document.getElementById("slContent").innerHTML=slides[slIdx];
+  document.getElementById("slNum").textContent=`${slIdx+1} / ${slides.length}`;
+  document.getElementById("slCnt").textContent=`${slIdx+1} / ${slides.length}`;
+  document.getElementById("presTitle").textContent=curT?curT.t:"탐구활동 발표";
+  document.getElementById("presDots").innerHTML=slides.map((_,i)=>`<div class="pdot${i===slIdx?" on":""}" onclick="gotoSl(${i})"></div>`).join("");
+}
+function nextSl(){if(slIdx<slides.length-1){slIdx++;renderSl();}}
+function prevSl(){if(slIdx>0){slIdx--;renderSl();}}
+function gotoSl(i){slIdx=i;renderSl();}
+function endPres(){document.getElementById("pres").style.display="none";}
+document.addEventListener("keydown",e=>{
+  if(document.getElementById("pres").style.display==="flex"){
+    if(e.key==="ArrowRight"||e.key===" ")nextSl();
+    else if(e.key==="ArrowLeft")prevSl();
+    else if(e.key==="Escape")endPres();
+  }
+});
+
+initPart();
+</script>
+</body>
+</html>
